@@ -13,6 +13,11 @@ public class Response {
         this.itemsToBeReturned = itemsToBeReturned;
     }
 
+    public Response(String message, int statusCode) {
+        this.message = message;
+        this.statusCode = statusCode;
+    }
+
     public String getMessage() {
         return message;
     }
