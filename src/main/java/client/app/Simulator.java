@@ -161,7 +161,7 @@ public class Simulator {
                     TodoItem item = takeCreateItemFromUser();
                     if (item != null) {
                         currentUser.addTodoItem(item);
-                        itemsService.showAllTodoItems(currentUser.getItems());
+                        //itemsService.showAllTodoItems(currentUser.getItems());
                         itemsService.addTodoItem(currentUser.getName(), item);
                         saveFile();
                     }
