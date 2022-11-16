@@ -11,12 +11,11 @@ public class UserService {
         return userRepository.createUser(name);
     }
 
-    public String updateUsersName(String name, String newName){
+    public boolean updateUsersName(String name, String newName){
         boolean updated = userRepository.updateUsersName(name,newName);
         if(updated){
-            System.out.println("YOUR NAME WAS UPDATED SUCCESSFULLY "+ newName.toUpperCase());
-            return newName;
+            return true;
         }
-        return null;
+        return false;
     }
 }
