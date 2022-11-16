@@ -11,7 +11,7 @@ import server.todoItems.TodoItemsService;
 import java.util.List;
 
 @Path("searchBy")
-public class SearchConstroller {
+public class SearchController {
      TodoItemsService todoItemsService=new TodoItemsService(new TodoItemsRepository());
     @GET
     @Path("Title")

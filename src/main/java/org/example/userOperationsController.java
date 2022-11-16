@@ -12,7 +12,7 @@ import server.todoItems.TodoItemsService;
 import java.util.List;
 
 @Path("get")
-public class getController {
+public class userOperationsController {
 
     TodoItemsRepository repository = new TodoItemsRepository();
     TodoItemsService todoItemsService=new TodoItemsService(repository);
