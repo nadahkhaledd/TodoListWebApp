@@ -20,9 +20,10 @@ public class UserUpdateController {
     @Consumes(MediaType.APPLICATION_JSON)
     public String updateUsersName(@PathParam("name") String name, Map<String,String> updateParams) {
         boolean updated = userService.updateUsersName(name,updateParams.get("newName"));
-        if(updated)
+        if(updated) {
             return "YOUR NAME WAS UPDATED SUCCESSFULLY "+
                     updateParams.get("newName").toUpperCase();
+        }
         else{
             return "ERROR - COULD NOT UPDATE NAME";
         }
