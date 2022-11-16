@@ -100,6 +100,21 @@ public class TodoItemsRepository {
         }
         return result;
     }
+
+    public ResultSet getFavorites(String username) {
+        ResultSet result = null;
+        try {
+            result = stmt.executeQuery("SELECT t.title, t.description, " +
+                    "t.priority, t.category, t.startDate, t.endDate, t.isFavorite \n" +
+                    "FROM todolist.user as u JOIN todolist.todoitem as t\n" +
+                    "ON t.userId = u.iduser \n " +
+                    "WHERE u.name = '" + username + "'"+" and t.isFavorite= 1");
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return result;
+    }
     public ResultSet getUserTodos(String username) {
         ResultSet result = null;
         try {

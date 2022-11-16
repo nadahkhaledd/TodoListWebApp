@@ -72,12 +72,12 @@ public class TodoItemsService {
         return false;
     }
 
-    public void showAllTodoItems(ArrayList<TodoItem> userTodoItems) {
-        if (userTodoItems.isEmpty())
-            System.out.println(font.ANSI_RED + "Sorry , no items available " + font.ANSI_RESET);
-        else
-            userTodoItems.forEach(System.out::println);
-    }
+//    public void showAllTodoItems(ArrayList<TodoItem> userTodoItems) {
+//        if (userTodoItems.isEmpty())
+//            System.out.println(font.ANSI_RED + "Sorry , no items available " + font.ANSI_RESET);
+//        else
+//            userTodoItems.forEach(System.out::println);
+//    }
 
 
     public ArrayList<TodoItem> getTodosFromDB(ResultSet result) {
@@ -109,11 +109,11 @@ public class TodoItemsService {
     }
 
 
-    public void showTop5ItemsByDate(String username) {
-        ResultSet result = repository.getUserLatestTodos(username);
-        ArrayList<TodoItem> items = getTodosFromDB(result);
-        items.forEach(System.out::println);
-    }
+//    public void showTop5ItemsByDate(String username) {
+//        ResultSet result = repository.getUserLatestTodos(username);
+//        ArrayList<TodoItem> items = getTodosFromDB(result);
+//        items.forEach(System.out::println);
+//    }
 
     /// Nadah: needs modification
     private void printListItems(int lastIndex, ArrayList<TodoItem> userTodoItems) {
@@ -159,53 +159,53 @@ public class TodoItemsService {
                 break;
         }
         return userTodos;
-            //return searchShowItemsBySearchKey(searchKey,searchValue,userTodos);
     }
-    public ArrayList<TodoItem> searchShowItemsBySearchKey(SearchKey searchKey, String searchValue, ArrayList<TodoItem> userTodoItems) {
-        ArrayList<TodoItem> returnedItems = new ArrayList<>();
-        switch (searchKey) {
-            case Title:
-                int returnedIndex = getItemByTitle(searchValue, userTodoItems);
-                if (returnedIndex != -1)
-                    returnedItems.add(userTodoItems.get(returnedIndex));
-                break;
-
-            case Priority:
-                returnedItems = getItemsByPriority(Priority.valueOf(searchValue), userTodoItems);
-                break;
-
-            case StartDate:
-                try {
-                    Date startDate = new SimpleDateFormat("dd-MM-yyyy").parse(searchValue);
-                    returnedItems = getItemsByStartDate(startDate, userTodoItems);
-                } catch (ParseException e) {
-                    System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
-                    return null;
-                }
-                break;
-
-            case EndDate:
-                try {
-                    Date endDate = new SimpleDateFormat("dd-MM-yyyy").parse(searchValue);
-                    returnedItems = getItemsByEndDate(endDate, userTodoItems);
-                } catch (ParseException e) {
-                    System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
-                    return null;
-                }
-                break;
-
-            case Favorite:
-                returnedItems = getItemsByFavorite(userTodoItems);
-                break;
-        }
-
-        if (returnedItems.isEmpty()) {
-            System.err.println("No results found.");
-        } else {
-            returnedItems.forEach(System.out::println);
-        }
-        return returnedItems;
-    }
+//    public ArrayList<TodoItem> searchShowItemsBySearchKey(SearchKey searchKey, String searchValue, ArrayList<TodoItem> userTodoItems) {
+//        ArrayList<TodoItem> returnedItems = new ArrayList<>();
+//        switch (searchKey) {
+//            case Title:
+//                int returnedIndex = getItemByTitle(searchValue, userTodoItems);
+//                if (returnedIndex != -1)
+//                    returnedItems.add(userTodoItems.get(returnedIndex));
+//                break;
+//
+//            case Priority:
+//                returnedItems = getItemsByPriority(Priority.valueOf(searchValue), userTodoItems);
+//                break;
+//
+//            case StartDate:
+//                try {
+//                    Date startDate = new SimpleDateFormat("dd-MM-yyyy").parse(searchValue);
+//                    returnedItems = getItemsByStartDate(startDate, userTodoItems);
+//                } catch (ParseException e) {
+//                    System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
+//                    return null;
+//                }
+//                break;
+//
+//            case EndDate:
+//                try {
+//                    Date endDate = new SimpleDateFormat("dd-MM-yyyy").parse(searchValue);
+//                    returnedItems = getItemsByEndDate(endDate, userTodoItems);
+//                } catch (ParseException e) {
+//                    System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
+//                    return null;
+//                }
+//                break;
+//
+//            case Favorite:
+//                returnedItems = getItemsByFavorite(userTodoItems);
+//                break;
+//        }
+//
+//        if (returnedItems.isEmpty()) {
+//            System.err.println("No results found.");
+//        } else {
+//            returnedItems.forEach(System.out::println);
+//        }
+//        return returnedItems;
+//    }
+//
     public boolean addItemToFavorite(String name,String title,ArrayList<TodoItem> userTodoItems){
         boolean updated = repository.addItemToFavorite(name,title);
         if(updated) {
@@ -216,9 +216,9 @@ public class TodoItemsService {
         return updated;
     }
 
-    public void printFavorites(ArrayList<TodoItem> userTodoItems) {
-        searchShowItemsBySearchKey(SearchKey.Favorite, "true", userTodoItems);
-    }
+//    public void printFavorites(ArrayList<TodoItem> userTodoItems) {
+//        searchShowItemsBySearchKey(SearchKey.Favorite, "true", userTodoItems);
+//    }
 
     public boolean addItemToCategory(String name,String title, Category category,ArrayList<TodoItem> userTodoItems){
         boolean updated = repository.addItemToCategory(name,title,category);

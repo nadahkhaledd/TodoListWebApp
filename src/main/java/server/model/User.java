@@ -149,16 +149,16 @@ public class User implements Serializable {
 //    }
 
     /// Nadah: I think this needs modification
-    public void showTop5ItemsByDate() {
-        if (items.isEmpty())
-            System.out.println(font.ANSI_RED + "sorry, no items available." + font.ANSI_RESET);
-        else {
-            itemsService.showTop5ItemsByDate(this.getName());
-//            int lastIndex = (items.size() >= 5) ? 5: items.size();
-//            sortTodoItemsByDate();
-//            printListItems(lastIndex);
-        }
-    }
+//    public void showTop5ItemsByDate() {
+//        if (items.isEmpty())
+//            System.out.println(font.ANSI_RED + "sorry, no items available." + font.ANSI_RESET);
+//        else {
+//            itemsService.showTop5ItemsByDate(this.getName());
+////            int lastIndex = (items.size() >= 5) ? 5: items.size();
+////            sortTodoItemsByDate();
+////            printListItems(lastIndex);
+//        }
+//    }
 
 //    public void searchShowItemsBySearchKey(SearchKey searchKey, String searchValue){
 //        ArrayList<TodoItem> returnedItems = new ArrayList<>();
