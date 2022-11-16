@@ -60,16 +60,22 @@ public class TodoItemsService {
 
     }
 
-    public boolean deleteTodoItem(String title, ArrayList<TodoItem> userTodoItems) {
-        int foundItemIndex = getItemByTitle(title, userTodoItems);
-        if (foundItemIndex != -1) {
-            userTodoItems.remove(foundItemIndex);
-            boolean isItemDeleted = repository.deleteTodoItem(title);
-            System.out.println(isItemDeleted ? "Item deleted successfully." : font.ANSI_RED + "Item couldn't be deleted" + font.ANSI_RESET);
-            return isItemDeleted;
-        }
-        System.out.println(font.ANSI_RED + "Item title is not found" + font.ANSI_RESET);
-        return false;
+//    public boolean deleteTodoItem(String title, ArrayList<TodoItem> userTodoItems) {
+//        int foundItemIndex = getItemByTitle(title, userTodoItems);
+//        if (foundItemIndex != -1) {
+//            userTodoItems.remove(foundItemIndex);
+//            boolean isItemDeleted = repository.deleteTodoItem(title);
+//            System.out.println(isItemDeleted ? "Item deleted successfully." : font.ANSI_RED + "Item couldn't be deleted" + font.ANSI_RESET);
+//            return isItemDeleted;
+//        }
+//        System.out.println(font.ANSI_RED + "Item title is not found" + font.ANSI_RESET);
+//        return false;
+//    }
+
+    public boolean deleteTodoItem(String title, String name) {
+        boolean isItemDeleted = repository.deleteTodoItem(title, name);
+        System.out.println(isItemDeleted ? "Item deleted successfully." : font.ANSI_RED + "Item couldn't be deleted" + font.ANSI_RESET);
+        return isItemDeleted;
     }
 
     public void showAllTodoItems(ArrayList<TodoItem> userTodoItems) {

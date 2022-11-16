@@ -424,7 +424,8 @@ public class Simulator {
             utils.print("Enter title of item to be deleted:");
             String title = utils.getInput("invalid title");
             if (title.equalsIgnoreCase("/back")) return;
-            itemsService.deleteTodoItem(title, currentUser.getItems());
+            //  itemsService.deleteTodoItem(title, currentUser.getItems());
+            itemsService.deleteTodoItem(title, currentUser.getName());
             //  currentUser.deleteTodoItem(title);
 
         }

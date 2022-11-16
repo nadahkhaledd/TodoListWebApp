@@ -78,11 +78,11 @@ public class TodoItemsRepository {
 
     }
 
-    public boolean deleteTodoItem(String title) {
-        System.out.println("title = " + title);
+    public boolean deleteTodoItem(String title, String name) {
+        String subQuery = "(SELECT iduser FROM todolist.user where name= '"+name+"')";
         try {
             String sqlQuery = "DELETE FROM todolist.todoitem " +
-                    "WHERE title = '" + title + "'";
+                    "WHERE title = '" + title + "' AND userid = " + subQuery;
             stmt.executeUpdate(sqlQuery);
             return true;
         } catch (SQLException e) {
