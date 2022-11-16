@@ -178,15 +178,15 @@ public class Simulator {
                     break;
 
                 case 4:
-                    //itemsService.showAllTodoItems(currentUser.getItems());
+                    itemsService.showAllTodoItems(currentUser.getItems());
                     break;
 
                 case 5:
-                    //currentUser.showTop5ItemsByDate();
+                    currentUser.showTop5ItemsByDate();
                     break;
 
                 case 6:
-                    //search();
+                    search();
                     break;
 
                 case 7:
@@ -200,7 +200,7 @@ public class Simulator {
                     break;
 
                 case 9:
-                    //itemsService.printFavorites(currentUser.getItems());
+                    itemsService.printFavorites(currentUser.getItems());
                     break;
 
                 case 10:
@@ -430,61 +430,61 @@ public class Simulator {
         }
     }
 
-//    private void search() {
-//        boolean isSearchKeyValid = false;
-//        while (!isSearchKeyValid) {
-//            utils.print(text.chooseSearchFilter);
-//            String searchOption = scanner.nextLine();
-//
-//            switch (searchOption) {
-//                case "1":
-//                    utils.print("Enter title of an item: ");
-//                    String searchTitle = utils.getInput("invalid title");
-//                    if (searchTitle.equalsIgnoreCase("/back")) return;
-//                    itemsService.searchShowItemsBySearchKey(SearchKey.Title, searchTitle, currentUser.getItems());
-//                    isSearchKeyValid = true;
-//                    break;
-//
-//                case "2":
-//                    String searchStartDate;
-//                    do {
-//                        utils.print(text.enterStartDate);
-//                        searchStartDate = scanner.next();
-//                        if (searchStartDate.equalsIgnoreCase("/back")) return;
-//                    } while (!dateUtils.isValidDate(searchStartDate));
-//                    itemsService.searchShowItemsBySearchKey(SearchKey.StartDate, searchStartDate, currentUser.getItems());
-//                    isSearchKeyValid = true;
-//                    break;
-//
-//                case "3":
-//                    String searchEndDate;
-//                    do {
-//                        utils.print(text.enterEndDate);
-//                        searchEndDate = scanner.next();
-//                        if (searchEndDate.equalsIgnoreCase("/back")) return;
-//                    } while (!dateUtils.isValidDate(searchEndDate));
-//                    itemsService.searchShowItemsBySearchKey(SearchKey.EndDate, searchEndDate, currentUser.getItems());
-//                    isSearchKeyValid = true;
-//                    break;
-//
-//                case "4":
-//                    utils.print(text.choosePriority);
-//                    int searchPriority = utils.getInput("Invalid option, try again."
-//                            + font.ANSI_RESET + "\n" + text.choosePriority, 1, 3);
-//                    if (searchPriority == -1) return;
-//                    String priorityValue = (searchPriority == 1) ? "Low" : ((searchPriority == 2) ? "Medium" : "High");
-//                    itemsService.searchShowItemsBySearchKey(SearchKey.Priority, priorityValue, currentUser.getItems());
-//                    isSearchKeyValid = true;
-//                    break;
-//                case "/back":
-//                    return;
-//
-//                default:
-//                    System.err.println("Invalid input.");
-//                    break;
-//            }
-//        }
-//    }
+    private void search() {
+        boolean isSearchKeyValid = false;
+        while (!isSearchKeyValid) {
+            utils.print(text.chooseSearchFilter);
+            String searchOption = scanner.nextLine();
+
+            switch (searchOption) {
+                case "1":
+                    utils.print("Enter title of an item: ");
+                    String searchTitle = utils.getInput("invalid title");
+                    if (searchTitle.equalsIgnoreCase("/back")) return;
+                    itemsService.searchShowItemsBySearchKey(SearchKey.Title, searchTitle, currentUser.getItems());
+                    isSearchKeyValid = true;
+                    break;
+
+                case "2":
+                    String searchStartDate;
+                    do {
+                        utils.print(text.enterStartDate);
+                        searchStartDate = scanner.next();
+                        if (searchStartDate.equalsIgnoreCase("/back")) return;
+                    } while (!dateUtils.isValidDate(searchStartDate));
+                    itemsService.searchShowItemsBySearchKey(SearchKey.StartDate, searchStartDate, currentUser.getItems());
+                    isSearchKeyValid = true;
+                    break;
+
+                case "3":
+                    String searchEndDate;
+                    do {
+                        utils.print(text.enterEndDate);
+                        searchEndDate = scanner.next();
+                        if (searchEndDate.equalsIgnoreCase("/back")) return;
+                    } while (!dateUtils.isValidDate(searchEndDate));
+                    itemsService.searchShowItemsBySearchKey(SearchKey.EndDate, searchEndDate, currentUser.getItems());
+                    isSearchKeyValid = true;
+                    break;
+
+                case "4":
+                    utils.print(text.choosePriority);
+                    int searchPriority = utils.getInput("Invalid option, try again."
+                            + font.ANSI_RESET + "\n" + text.choosePriority, 1, 3);
+                    if (searchPriority == -1) return;
+                    String priorityValue = (searchPriority == 1) ? "Low" : ((searchPriority == 2) ? "Medium" : "High");
+                    itemsService.searchShowItemsBySearchKey(SearchKey.Priority, priorityValue, currentUser.getItems());
+                    isSearchKeyValid = true;
+                    break;
+                case "/back":
+                    return;
+
+                default:
+                    System.err.println("Invalid input.");
+                    break;
+            }
+        }
+    }
 
     private void addItemToCategoryFromUser() {
         String title = getExistingTitle("Category");
