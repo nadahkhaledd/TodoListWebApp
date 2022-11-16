@@ -54,7 +54,7 @@ public class TodoItemsService {
         return repository.createUserTodo(name, item);
     }
 
-    public boolean updateTodoItem(String name,TodoItem item, String oldTitle,ArrayList<TodoItem> userTodoItems){
+    public boolean updateTodoItem(String name,TodoItem item, String oldTitle){
         //repo.update
         return repository.updateTodoItem(name,item,oldTitle);
 
@@ -112,6 +112,7 @@ public class TodoItemsService {
         return todos;
     }
 
+
     public void showTop5ItemsByDate(String username) {
         ResultSet result = repository.getUserLatestTodos(username);
         ArrayList<TodoItem> items = getTodosFromDB(result);
@@ -134,8 +135,34 @@ public class TodoItemsService {
         return -1;
     }
     public ArrayList<TodoItem>searchByKey(SearchKey searchKey, String searchValue,String username){
-        ArrayList<TodoItem> userTodos=getTodosFromDB(repository.getUserTodos(username));
-        return searchShowItemsBySearchKey(searchKey,searchValue,userTodos);
+        ArrayList<TodoItem> userTodos = null;
+        switch (searchKey) {
+            case Title:
+                userTodos = getTodosFromDB(repository.searchByTitle(username, searchValue));
+                break;
+            case Priority:
+                userTodos = getTodosFromDB(repository.searchByPriority(username, searchValue));
+                break;
+            case StartDate:
+                try {
+                    Date startDate = new SimpleDateFormat("dd-MM-yyyy").parse(searchValue);
+                    userTodos = getTodosFromDB(repository.searchByStartDate(username, searchValue));
+                } catch (ParseException e) {
+                    System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
+
+                }
+                break;
+            case EndDate:
+                try {
+                    Date endDate = new SimpleDateFormat("dd-MM-yyyy").parse(searchValue);
+                    userTodos = userTodos = getTodosFromDB(repository.searchByEndDate(username, searchValue));
+                } catch (ParseException e) {
+                    System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
+
+                }
+                break;
+        }
+        return userTodos;
     }
     public ArrayList<TodoItem> searchShowItemsBySearchKey(SearchKey searchKey, String searchValue, ArrayList<TodoItem> userTodoItems) {
         ArrayList<TodoItem> returnedItems = new ArrayList<>();
@@ -182,13 +209,14 @@ public class TodoItemsService {
         }
         return returnedItems;
     }
-    public boolean addItemToFavorite(String name,String title,ArrayList<TodoItem> userTodoItems){
+    public boolean addItemToFavorite(String name,String title){
         boolean updated = repository.addItemToFavorite(name,title);
-        if(updated) {
+        /*if(updated) {
+            //needs to be added to client
             int itemIndex = getItemByTitle(title, userTodoItems);
             userTodoItems.get(itemIndex).setFavorite(true);
             System.out.println("ADDED TO FAVORITES SUCCESSFULLY");
-        }
+        }*/
         return updated;
     }
 
@@ -196,13 +224,13 @@ public class TodoItemsService {
         searchShowItemsBySearchKey(SearchKey.Favorite, "true", userTodoItems);
     }
 
-    public boolean addItemToCategory(String name,String title, Category category,ArrayList<TodoItem> userTodoItems){
+    public boolean addItemToCategory(String name,String title, Category category){
         boolean updated = repository.addItemToCategory(name,title,category);
-        if(updated) {
+        /*if(updated) {
             int itemIndex = getItemByTitle(title,userTodoItems);
             userTodoItems.get(itemIndex).setCategory(category);
             System.out.println("ADDED TO CATEGORY SUCCESSFULLY");
-        }
+        }*/
         return updated;
     }
 

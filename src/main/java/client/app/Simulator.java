@@ -161,7 +161,7 @@ public class Simulator {
                     TodoItem item = takeCreateItemFromUser();
                     if (item != null) {
                         currentUser.addTodoItem(item);
-                        itemsService.showAllTodoItems(currentUser.getItems());
+                        //itemsService.showAllTodoItems(currentUser.getItems());
                         itemsService.addTodoItem(currentUser.getName(), item);
                         saveFile();
                     }
@@ -410,7 +410,7 @@ public class Simulator {
 
         } else if (confirmUpdate == -1) return;
 
-        boolean updated = itemsService.updateTodoItem(currentUser.getName(), item, oldTitle, currentUser.getItems());
+        boolean updated = itemsService.updateTodoItem(currentUser.getName(), item, oldTitle);
         if (updated) {
             currentUser.getItems().get(itemIndex).updateNewItem(item);
             System.out.println("Item updated:\n" + item.toString());
@@ -494,14 +494,14 @@ public class Simulator {
                 text.chooseCategory, 1, 6);
         Category category = text.categories.get(userCategoryChoice-1);
         //currentUser.addItemToCategory(title,category);
-        itemsService.addItemToCategory(currentUser.getName(),title,category,currentUser.getItems());
+        itemsService.addItemToCategory(currentUser.getName(),title,category);
     }
 
     private void addItemToFavoriteFromUser() {
         String title = getExistingTitle("Favorites");
         if(title.equalsIgnoreCase("/back")) return;
         //currentUser.addItemToFavorite(title);
-        itemsService.addItemToFavorite(currentUser.getName(),title,currentUser.getItems());
+        itemsService.addItemToFavorite(currentUser.getName(),title);
     }
 
     private void updateName() {
@@ -519,8 +519,8 @@ public class Simulator {
                 System.err.println("The name entered already exists, please try again");
             }
         }
-        String result = userService.updateUsersName(currentUser.getName(),name);
-        if(result!=null)
+        boolean result = userService.updateUsersName(currentUser.getName(),name);
+        if(result)
             currentUser.setName(name);
 
     }
