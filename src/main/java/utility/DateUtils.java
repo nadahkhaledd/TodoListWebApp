@@ -61,4 +61,9 @@ public class DateUtils {
         Date formattedDate = convertStringToDate(DateFormat.format(date));
         return formattedDate;
     }
+    public String convertDateToString(Date date){
+        DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        String dateString = df.format(date);
+        return dateString;
+    }
 }

@@ -1,7 +1,9 @@
 package utility;
 
+import server.todoItems.TodoItem;
 import ui.Font;
 
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Utils {
@@ -44,5 +46,19 @@ public class Utils {
 
     public String capitalizeFirstLetter(String word) {
         return word.substring(0, 1).toUpperCase() + word.substring(1);
+    }
+
+    public HashMap<String,String> todoItemToMap(TodoItem todoItem){
+        DateUtils dateUtils = new DateUtils();
+
+        HashMap<String,String> todoItemMap = new HashMap<>();
+        todoItemMap.put("title",todoItem.getTitle());
+        todoItemMap.put("description",todoItem.getDescription());
+        todoItemMap.put("priority",todoItem.getPriority().toString());
+        todoItemMap.put("category",todoItem.getCategory().toString());
+        todoItemMap.put("startDate",dateUtils.convertDateToString(todoItem.getStartDate()));
+        todoItemMap.put("endDate",dateUtils.convertDateToString(todoItem.getEndDate()));
+        todoItemMap.put("isFavorite",String.valueOf(todoItem.isFavorite()));
+        return todoItemMap;
     }
 }
