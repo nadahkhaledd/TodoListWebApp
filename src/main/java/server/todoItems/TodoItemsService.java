@@ -73,9 +73,7 @@ public class TodoItemsService {
 //    }
 
     public boolean deleteTodoItem(String title, String name) {
-        boolean isItemDeleted = repository.deleteTodoItem(title, name);
-        System.out.println(isItemDeleted ? "Item deleted successfully." : font.ANSI_RED + "Item couldn't be deleted" + font.ANSI_RESET);
-        return isItemDeleted;
+        return repository.deleteTodoItem(title, name);
     }
 
     public void showAllTodoItems(ArrayList<TodoItem> userTodoItems) {
