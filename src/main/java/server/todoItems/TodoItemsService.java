@@ -130,8 +130,35 @@ public class TodoItemsService {
         return -1;
     }
     public ArrayList<TodoItem>searchByKey(SearchKey searchKey, String searchValue,String username){
-        ArrayList<TodoItem> userTodos=getTodosFromDB(repository.getUserTodos(username));
-        return searchShowItemsBySearchKey(searchKey,searchValue,userTodos);
+        ArrayList<TodoItem> userTodos = null;
+        switch (searchKey) {
+            case Title:
+                userTodos = getTodosFromDB(repository.searchByTitle(username, searchValue));
+                break;
+            case Priority:
+                userTodos = getTodosFromDB(repository.searchByPriority(username, searchValue));
+                break;
+            case StartDate:
+                try {
+                    Date startDate = new SimpleDateFormat("dd-MM-yyyy").parse(searchValue);
+                    userTodos = getTodosFromDB(repository.searchByStartDate(username, searchValue));
+                } catch (ParseException e) {
+                    System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
+
+                }
+                break;
+            case EndDate:
+                try {
+                    Date endDate = new SimpleDateFormat("dd-MM-yyyy").parse(searchValue);
+                    userTodos = userTodos = getTodosFromDB(repository.searchByEndDate(username, searchValue));
+                } catch (ParseException e) {
+                    System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
+
+                }
+                break;
+        }
+        return userTodos;
+            //return searchShowItemsBySearchKey(searchKey,searchValue,userTodos);
     }
     public ArrayList<TodoItem> searchShowItemsBySearchKey(SearchKey searchKey, String searchValue, ArrayList<TodoItem> userTodoItems) {
         ArrayList<TodoItem> returnedItems = new ArrayList<>();
