@@ -2,7 +2,6 @@ package org.example;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 import server.model.UserRepository;
 import server.model.UserService;
 
@@ -18,14 +17,15 @@ public class UserUpdateController {
     @PUT
     @Path("/{name}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public String updateUsersName(@PathParam("name") String name, Map<String,String> updateParams) {
+    public Response updateUsersName(@PathParam("name") String name, Map<String,String> updateParams) {
         boolean updated = userService.updateUsersName(name,updateParams.get("newName"));
         if(updated) {
-            return "YOUR NAME WAS UPDATED SUCCESSFULLY "+
-                    updateParams.get("newName").toUpperCase();
+            return new Response("YOUR NAME WAS UPDATED SUCCESSFULLY "+
+                    updateParams.get("newName").toUpperCase(),200,null);
         }
         else{
-            return "ERROR - COULD NOT UPDATE NAME";
+            return new Response("COULD NOT UPDATE NAME"+
+                    updateParams.get("newName").toUpperCase(),400,null);
         }
     }
 
