@@ -108,6 +108,7 @@ public class TodoItemsService {
         return todos;
     }
 
+
     public void showTop5ItemsByDate(String username) {
         ResultSet result = repository.getUserLatestTodos(username);
         ArrayList<TodoItem> items = getTodosFromDB(result);
