@@ -3,8 +3,10 @@ package server.model;
 import server.connection.DBConnection;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class UserRepository {
     Connection connection;
@@ -42,5 +44,20 @@ public class UserRepository {
             e.printStackTrace();
             return false;
         }
+    }
+    public ArrayList<String> getUserNames() {
+        ResultSet result = null;
+        ArrayList<String> usernames = new ArrayList<>();
+        try {
+            result = stmt.executeQuery(" SELECT name \n" +
+                    "FROM todolist.user");
+
+            while (result.next())
+                usernames.add(result.getString(1));
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return usernames;
     }
 }

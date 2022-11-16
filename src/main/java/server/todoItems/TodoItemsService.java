@@ -129,8 +129,11 @@ public class TodoItemsService {
         }
         return -1;
     }
-
-    public void searchShowItemsBySearchKey(SearchKey searchKey, String searchValue, ArrayList<TodoItem> userTodoItems) {
+    public ArrayList<TodoItem>searchByKey(SearchKey searchKey, String searchValue,String username){
+        ArrayList<TodoItem> userTodos=getTodosFromDB(repository.getUserTodos(username));
+        return searchShowItemsBySearchKey(searchKey,searchValue,userTodos);
+    }
+    public ArrayList<TodoItem> searchShowItemsBySearchKey(SearchKey searchKey, String searchValue, ArrayList<TodoItem> userTodoItems) {
         ArrayList<TodoItem> returnedItems = new ArrayList<>();
         switch (searchKey) {
             case Title:
@@ -149,6 +152,7 @@ public class TodoItemsService {
                     returnedItems = getItemsByStartDate(startDate, userTodoItems);
                 } catch (ParseException e) {
                     System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
+                    return null;
                 }
                 break;
 
@@ -158,6 +162,7 @@ public class TodoItemsService {
                     returnedItems = getItemsByEndDate(endDate, userTodoItems);
                 } catch (ParseException e) {
                     System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
+                    return null;
                 }
                 break;
 
@@ -171,6 +176,7 @@ public class TodoItemsService {
         } else {
             returnedItems.forEach(System.out::println);
         }
+        return returnedItems;
     }
     public boolean addItemToFavorite(String name,String title,ArrayList<TodoItem> userTodoItems){
         boolean updated = repository.addItemToFavorite(name,title);

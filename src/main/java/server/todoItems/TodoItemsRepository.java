@@ -44,21 +44,7 @@ public class TodoItemsRepository {
         }
     }
 
-    public ArrayList<String> getUserNames() {
-        ResultSet result = null;
-        ArrayList<String> usernames = new ArrayList<>();
-        try {
-            result = stmt.executeQuery(" SELECT name \n" +
-                    "FROM todolist.user");
 
-            while (result.next())
-                usernames.add(result.getString(1));
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-
-        return usernames;
-    }
 
     public ResultSet getUserTodos(String username) {
         ResultSet result = null;

@@ -1,0 +1,39 @@
+package org.example;
+
+public class Response {
+    String message;
+    int statusCode;
+    Object itemsToBeReturned;
+
+    public Response(){}
+
+    public Response(String message, int statusCode, Object itemsToBeReturned) {
+        this.message = message;
+        this.statusCode = statusCode;
+        this.itemsToBeReturned = itemsToBeReturned;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public Object getItemsToBeReturned() {
+        return itemsToBeReturned;
+    }
+
+    public void setItemsToBeReturned(Object itemsToBeReturned) {
+        this.itemsToBeReturned = itemsToBeReturned;
+    }
+}

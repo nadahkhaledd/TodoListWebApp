@@ -5,6 +5,7 @@ public class UserService {
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+
     }
 
     public boolean addUser(String name) {
