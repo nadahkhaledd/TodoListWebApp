@@ -1,7 +1,12 @@
 package utility;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import server.todoItems.TodoItem;
 import ui.Font;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Utils {
@@ -45,4 +50,34 @@ public class Utils {
     public String capitalizeFirstLetter(String word) {
         return word.substring(0, 1).toUpperCase() + word.substring(1);
     }
+
+    public ArrayList<String> convertItemsToJson(ArrayList<TodoItem> items){
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList<String> toJson = new ArrayList<>();
+
+        for (TodoItem item: items) {
+            try {
+                toJson.add(mapper.writeValueAsString(item));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return toJson;
+    }
+
+    public ArrayList<TodoItem> jsonToTodos(ArrayList<String> list){
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList<TodoItem> items = new ArrayList<>();
+        try {
+            for(String l : list){
+                TodoItem obj = mapper.readValue(l, TodoItem.class);
+                items.add(obj);
+            }
+        }
+        catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+        return items;
+    }
+
 }
