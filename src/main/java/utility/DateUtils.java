@@ -17,11 +17,11 @@ public class DateUtils {
             if(dashesCount>=3){
                 throw new ParseException("invalid date format",15);
             }
-            DateFormat date = new SimpleDateFormat("dd-MM-yyyy");
+            DateFormat date = new SimpleDateFormat("yyyy-MM-dd");
             date.setLenient(false);
             date.parse(dateValue);
             Date dateAfterParsing = convertStringToDate(dateValue);
-            Date startDateLimit = convertStringToDate("1-1-2000");
+            Date startDateLimit = convertStringToDate("2000-1-1");
             if(dateAfterParsing.compareTo(startDateLimit)!= -1)
                 return true;
             else {
@@ -50,7 +50,7 @@ public class DateUtils {
 
     public Date convertStringToDate(String dateString){
         try {
-            return new SimpleDateFormat("dd-MM-yyyy").parse(dateString);
+            return new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }

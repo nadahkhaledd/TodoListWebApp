@@ -1,16 +1,15 @@
 package client.app;
-
 import enums.Category;
 import enums.Priority;
 import enums.SearchKey;
-import server.model.User;
-import server.model.UserRepository;
-import server.model.UserService;
 import server.storage.DBStorage;
 import server.storage.Storage;
 import server.todoItems.TodoItem;
 import server.todoItems.TodoItemsRepository;
 import server.todoItems.TodoItemsService;
+import server.user.User;
+import server.user.UserRepository;
+import server.user.UserService;
 import ui.Font;
 import ui.Text;
 import utility.DateUtils;
@@ -25,7 +24,7 @@ public class Simulator {
 
     TodoItemsRepository repository;
     TodoItemsService itemsService;
-
+    SearchRestClient searchClient=new SearchRestClient();
     private ArrayList<User> users = new ArrayList<>();
     private User currentUser = null;
     private Storage storage;
@@ -442,7 +441,8 @@ public class Simulator {
                     utils.print("Enter title of an item: ");
                     String searchTitle = utils.getInput("invalid title");
                     if (searchTitle.equalsIgnoreCase("/back")) return;
-                    itemsService.searchShowItemsBySearchKey(SearchKey.Title, searchTitle, currentUser.getItems());
+                    searchClient.SearchByTitle(currentUser.getName(),searchTitle).forEach(System.out::println);
+                   // itemsService.searchShowItemsBySearchKey(SearchKey.Title, searchTitle, currentUser.getItems());
                     isSearchKeyValid = true;
                     break;
 
@@ -453,7 +453,8 @@ public class Simulator {
                         searchStartDate = scanner.next();
                         if (searchStartDate.equalsIgnoreCase("/back")) return;
                     } while (!dateUtils.isValidDate(searchStartDate));
-                    itemsService.searchShowItemsBySearchKey(SearchKey.StartDate, searchStartDate, currentUser.getItems());
+                   // itemsService.searchShowItemsBySearchKey(SearchKey.StartDate, searchStartDate, currentUser.getItems());
+                    searchClient.SearchByStartDate(currentUser.getName(),searchStartDate).forEach(System.out::println);
                     isSearchKeyValid = true;
                     break;
 
@@ -464,7 +465,9 @@ public class Simulator {
                         searchEndDate = scanner.next();
                         if (searchEndDate.equalsIgnoreCase("/back")) return;
                     } while (!dateUtils.isValidDate(searchEndDate));
-                    itemsService.searchShowItemsBySearchKey(SearchKey.EndDate, searchEndDate, currentUser.getItems());
+                   // itemsService.searchShowItemsBySearchKey(SearchKey.EndDate, searchEndDate, currentUser.getItems());
+                    searchClient.SearchByEndDate(currentUser.getName(),searchEndDate).forEach(System.out::println);
+
                     isSearchKeyValid = true;
                     break;
 
@@ -474,7 +477,9 @@ public class Simulator {
                             + font.ANSI_RESET + "\n" + text.choosePriority, 1, 3);
                     if (searchPriority == -1) return;
                     String priorityValue = (searchPriority == 1) ? "Low" : ((searchPriority == 2) ? "Medium" : "High");
-                    itemsService.searchShowItemsBySearchKey(SearchKey.Priority, priorityValue, currentUser.getItems());
+                    //itemsService.searchShowItemsBySearchKey(SearchKey.Priority, priorityValue, currentUser.getItems());
+                    searchClient.SearchByPriority(currentUser.getName(),priorityValue).forEach(System.out::println);
+
                     isSearchKeyValid = true;
                     break;
                 case "/back":

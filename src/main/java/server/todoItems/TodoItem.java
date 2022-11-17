@@ -89,7 +89,7 @@ public class TodoItem implements Serializable,Cloneable {
     public String toString()
     {
         Font font = new Font();
-        SimpleDateFormat formatter=new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd");
         StringBuilder result = new StringBuilder();
         result.append(font.ANSI_BLUE + "--------------------------------------------------------------------------\n" + font.ANSI_RESET);
         if(isFavorite)

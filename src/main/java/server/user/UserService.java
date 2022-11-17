@@ -1,4 +1,4 @@
-package server.model;
+package server.user;
 
 public class UserService {
     private final UserRepository userRepository;

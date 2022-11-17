@@ -2,8 +2,8 @@ package org.example;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import server.model.UserRepository;
-import server.model.UserService;
+import server.user.UserRepository;
+import server.user.UserService;
 
 import java.util.Map;
 

@@ -1,7 +1,7 @@
 package server.storage;
 
-import server.model.User;
-import server.model.UserRepository;
+import server.user.User;
+import server.user.UserRepository;
 import server.todoItems.TodoItemsRepository;
 import server.todoItems.TodoItemsService;
 import utility.DateUtils;

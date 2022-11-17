@@ -95,7 +95,7 @@ public class TodoItemsService {
                 if (result.getString(1) == null) {
                     break;
                 }
-                String currentFormat = "dd-MM-yyyy";
+                String currentFormat = "yyyy-MM-dd";
                 todo = new TodoItem();
                 todo.setTitle(result.getString("title"));
                 todo.setDescription(result.getString("description"));
@@ -145,7 +145,7 @@ public class TodoItemsService {
                 break;
             case StartDate:
                 try {
-                    Date startDate = new SimpleDateFormat("dd-MM-yyyy").parse(searchValue);
+                    Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchValue);
                     userTodos = getTodosFromDB(repository.searchByStartDate(username, searchValue));
                 } catch (ParseException e) {
                     System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
@@ -154,7 +154,7 @@ public class TodoItemsService {
                 break;
             case EndDate:
                 try {
-                    Date endDate = new SimpleDateFormat("dd-MM-yyyy").parse(searchValue);
+                    Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchValue);
                     userTodos = userTodos = getTodosFromDB(repository.searchByEndDate(username, searchValue));
                 } catch (ParseException e) {
                     System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
@@ -179,7 +179,7 @@ public class TodoItemsService {
 
             case StartDate:
                 try {
-                    Date startDate = new SimpleDateFormat("dd-MM-yyyy").parse(searchValue);
+                    Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchValue);
                     returnedItems = getItemsByStartDate(startDate, userTodoItems);
                 } catch (ParseException e) {
                     System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
@@ -189,7 +189,7 @@ public class TodoItemsService {
 
             case EndDate:
                 try {
-                    Date endDate = new SimpleDateFormat("dd-MM-yyyy").parse(searchValue);
+                    Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchValue);
                     returnedItems = getItemsByEndDate(endDate, userTodoItems);
                 } catch (ParseException e) {
                     System.out.println(font.ANSI_RED + "invalid date format" + font.ANSI_RESET);
