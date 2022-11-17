@@ -8,7 +8,9 @@ import jakarta.ws.rs.core.MediaType;
 import server.todoItems.TodoItem;
 import server.todoItems.TodoItemsRepository;
 import server.todoItems.TodoItemsService;
+import utility.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("get")
@@ -16,15 +18,16 @@ public class userOperationsController {
 
     TodoItemsRepository repository = new TodoItemsRepository();
     TodoItemsService todoItemsService=new TodoItemsService(repository);
+    Utils utils = new Utils();
 
     @GET
     @Path("useritems")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getUserItems(@QueryParam("username") String username){
-        List<TodoItem> todoItems=todoItemsService.getTodosFromDB(repository.getUserTodos(username));
+        ArrayList<TodoItem> todoItems=todoItemsService.getTodosFromDB(repository.getUserTodos(username));
         if (todoItems.isEmpty())
-            return new Response("no items found for this user",204," ");
-        return new Response("OK",200,todoItems);
+            return new Response("no items found for this user",204,new ArrayList<String>());
+        return new Response("OK",200,utils.convertItemsToJson(todoItems));
     }
 
     @GET
@@ -33,7 +36,7 @@ public class userOperationsController {
     public Response getUserLatestItems(@QueryParam("username") String username){
         List<TodoItem> todoItems=todoItemsService.getTodosFromDB(repository.getUserLatestTodos(username));
         if (todoItems.isEmpty())
-            return new Response("no items found for this user",204," ");
+            return new Response("no items found for this user",204,todoItems);
         return new Response("OK",200,todoItems);
     }
 
@@ -43,7 +46,7 @@ public class userOperationsController {
     public Response getUserFavorites(@QueryParam("username") String username){
         List<TodoItem> todoItems=todoItemsService.getTodosFromDB(repository.getFavorites(username));
         if (todoItems.isEmpty())
-            return new Response("no items found for this user",204," ");
+            return new Response("no items found for this user",204,todoItems);
         return new Response("OK",200,todoItems);
     }
 
