@@ -7,8 +7,12 @@ import org.example.Response;
 
 public class UserUpdateClient {
     private Client client = ClientConnection.client;
+    private static  UserUpdateClient userUpdateClient = new UserUpdateClient();
 
-    public boolean updateUsersName(String oldName,String newName){
+    private UserUpdateClient() {
+    }
+
+    public boolean updateUsersName(String oldName, String newName){
         return client
                 .target(ClientConnection.REST_URI)
                 .path(oldName)
@@ -17,8 +21,13 @@ public class UserUpdateClient {
                 .readEntity(Response.class)
                 .getStatusCode()/100 == 2 ;
     }
+    public static UserUpdateClient getInstance(){
+        return userUpdateClient;
+    }
+
     /*public static void main(String[] args){
         UserUpdateClient u = new UserUpdateClient();
         System.out.println(u.updateUsersName("Sarah","Miand"));
     }*/
+
 }

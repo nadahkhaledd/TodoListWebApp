@@ -11,6 +11,7 @@ import java.util.Map;
 public class UserUpdateController {
     UserService userService = new UserService(new UserRepository());
 
+
     /**
      * Accepts a string of the new name
      */
@@ -26,5 +27,6 @@ public class UserUpdateController {
             return new Response("COULD NOT UPDATE NAME",400);
         }
     }
+
 
 }

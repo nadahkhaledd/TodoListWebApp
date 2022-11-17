@@ -1,14 +1,10 @@
 package org.example;
 
 import enums.Category;
-import enums.Priority;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import server.todoItems.*;
-import utility.DateUtils;
 
-import java.util.Date;
-import java.util.Map;
 
 @Path("/{name}/todolist")
 public class TodoItemUpdateController {

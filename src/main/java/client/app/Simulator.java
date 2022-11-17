@@ -410,7 +410,9 @@ public class Simulator {
 
         } else if (confirmUpdate == -1) return;
 
-        boolean updated = itemsService.updateTodoItem(currentUser.getName(), item, oldTitle);
+        //boolean updated = itemsService.updateTodoItem(currentUser.getName(), item, oldTitle);
+        boolean updated = TodoItemUpdateClient.getInstance()
+                .updateTodoItem(currentUser.getName(), item,oldTitle);
         if (updated) {
             currentUser.getItems().get(itemIndex).updateNewItem(item);
             System.out.println("Item updated:\n" + item.toString());
@@ -493,14 +495,28 @@ public class Simulator {
                 text.chooseCategory, 1, 6);
         Category category = text.categories.get(userCategoryChoice-1);
         //currentUser.addItemToCategory(title,category);
-        itemsService.addItemToCategory(currentUser.getName(),title,category);
+        //itemsService.addItemToCategory(currentUser.getName(),title,category);
+        boolean updated = TodoItemUpdateClient.getInstance()
+                        .addItemToCategory(currentUser.getName(),title,category );
+        if(updated){
+            int itemIndex = itemsService.getItemByTitle(title,currentUser.getItems());
+            currentUser.getItems().get(itemIndex).setCategory(category);
+            System.out.println("ADDED TO CATEGORY SUCCESSFULLY");
+        }
     }
 
     private void addItemToFavoriteFromUser() {
         String title = getExistingTitle("Favorites");
         if(title.equalsIgnoreCase("/back")) return;
-        //currentUser.addItemToFavorite(title);
-        itemsService.addItemToFavorite(currentUser.getName(),title);
+        currentUser.addItemToFavorite(title);
+        //itemsService.addItemToFavorite(currentUser.getName(),title);
+        boolean updated = TodoItemUpdateClient.getInstance()
+                .addItemToFavorites(currentUser.getName(), title);
+        if(updated){
+            int itemIndex = itemsService.getItemByTitle(title, currentUser.getItems());
+            currentUser.getItems().get(itemIndex).setFavorite(true);
+            System.out.println("ADDED TO FAVORITES SUCCESSFULLY");
+        }
     }
 
     private void updateName() {
@@ -518,8 +534,9 @@ public class Simulator {
                 System.err.println("The name entered already exists, please try again");
             }
         }
-        boolean result = userService.updateUsersName(currentUser.getName(),name);
-        if(result)
+        boolean updated = UserUpdateClient.getInstance()
+                        .updateUsersName(currentUser.getName(),name);
+        if(updated)
             currentUser.setName(name);
 
     }

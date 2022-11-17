@@ -1,37 +1,35 @@
 package client.app;
 
 import enums.Category;
-import enums.Priority;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.MediaType;
 import org.example.Response;
 import server.todoItems.TodoItem;
-import utility.DateUtils;
-import utility.Utils;
 
-import java.util.Date;
-import java.util.Map;
+
 
 public class TodoItemUpdateClient {
-    private Client client = ClientConnection.client;
-    Utils utils = new Utils();
+    private final Client client = ClientConnection.client;
 
+    private static TodoItemUpdateClient todoItemUpdateClient = new TodoItemUpdateClient();
 
+    private TodoItemUpdateClient() {
+    }
 
     /*public boolean updateTodoItem(String name,TodoItem item, String oldTitle) {
-        Map<String,String> todoItemMap = utils.todoItemToMap(item);
-        return client
-                .target(ClientConnection.REST_URI)
-                .path(name)
-                .path("todolist")
-                .path(oldTitle)
-                .request(MediaType.APPLICATION_JSON)
-                .put(Entity.entity(todoItemMap, MediaType.APPLICATION_JSON))
-                .readEntity(Response.class)
-                .getStatusCode()/100 == 2 ;
+            Map<String,String> todoItemMap = utils.todoItemToMap(item);
+            return client
+                    .target(ClientConnection.REST_URI)
+                    .path(name)
+                    .path("todolist")
+                    .path(oldTitle)
+                    .request(MediaType.APPLICATION_JSON)
+                    .put(Entity.entity(todoItemMap, MediaType.APPLICATION_JSON))
+                    .readEntity(Response.class)
+                    .getStatusCode()/100 == 2 ;
 
-    }*/
+        }*/
         public boolean updateTodoItem(String name,TodoItem item, String oldTitle){
         return client
                 .target(ClientConnection.REST_URI)
@@ -66,6 +64,9 @@ public class TodoItemUpdateClient {
                 .put(Entity.entity("true", MediaType.APPLICATION_JSON))
                 .readEntity(Response.class)
                 .getStatusCode()/100 == 2 ;
+    }
+    public static TodoItemUpdateClient getInstance(){
+            return todoItemUpdateClient;
     }
     /*public static void main(String[] args){
         TodoItemUpdateClient c = new TodoItemUpdateClient();
