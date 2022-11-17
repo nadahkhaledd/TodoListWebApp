@@ -7,7 +7,7 @@ import server.todoItems.TodoItem;
 import server.todoItems.TodoItemsRepository;
 import server.todoItems.TodoItemsService;
 
-@Path("/{name}/todolist")
+@Path("/todolist")
 public class TodoItemCreateController {
 
     TodoItemsService todoItemsService = new TodoItemsService(new TodoItemsRepository());
@@ -16,11 +16,11 @@ public class TodoItemCreateController {
     @Path("/createItem")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createTodoItem(@PathParam("name") String name, TodoItem todoItem) {
+    public Response createTodoItem(@QueryParam("name") String name, TodoItem todoItem) {
         boolean isCreated = todoItemsService.addTodoItem(name,todoItem);
         if(isCreated)
-            return new Response("Item created successfully.", 201, todoItem);
+            return new Response("Item created successfully.", 201);
         else
-            return new Response("Item couldn't be created.", 400, todoItem);
+            return new Response("Item couldn't be created.", 400);
     }
 }

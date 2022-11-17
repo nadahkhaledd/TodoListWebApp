@@ -1,9 +1,6 @@
 package org.example;
 
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import server.user.UserRepository;
 import server.user.UserService;
@@ -19,8 +16,8 @@ public class UserCreateContoller {
     @Path("/createUser")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createUser(Map<String, String> name) {
-        boolean isCreated = userService.addUser(name.get("userName"));
+    public Response createUser(@QueryParam("name") String name) {
+        boolean isCreated = userService.addUser(name);
         if(isCreated)
             return new Response("Item created successfully.", 201, name);
         else
