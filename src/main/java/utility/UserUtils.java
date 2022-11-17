@@ -22,7 +22,7 @@ public class UserUtils {
         ArrayList<User> users = new ArrayList<>();
        ArrayList<String> usernames = userClient.getUserNames();
         for (String username : usernames) {
-            ArrayList<TodoItem> userItems = todoListClient.getItems(username);
+            ArrayList<TodoItem> userItems = todoListClient.get(username, "useritems");
             User user = setUserData(username, userItems);
             users.add(user);
         }
