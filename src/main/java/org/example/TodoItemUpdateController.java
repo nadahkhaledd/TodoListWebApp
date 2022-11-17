@@ -27,8 +27,8 @@ public class TodoItemUpdateController {
     public Response updateTodoItem(@PathParam("name") String name,@PathParam("title") String oldTitle,
                                     Map<String,String> todoItemMap) {
         DateUtils dateUtils = new DateUtils();
-        Date startDate = dateUtils.convertStringToDate(todoItemMap.get("startDate"));
-        Date endDate = dateUtils.convertStringToDate(todoItemMap.get("endDate"));
+        Date startDate = dateUtils.convertStringToSQLDate(todoItemMap.get("startDate"));
+        Date endDate = dateUtils.convertStringToSQLDate(todoItemMap.get("endDate"));
         Priority priority = Priority.valueOf(todoItemMap.get("priority"));
         Category category = Category.valueOf(todoItemMap.get("category"));
         TodoItem todoItem = new TodoItem(todoItemMap.get("title"),todoItemMap.get("description"),
