@@ -1,227 +1,220 @@
-//package client.app;
-//
-//import enums.Category;
-//import enums.Priority;
-//import enums.SearchKey;
-//import server.model.User;
-//import server.model.UserRepository;
-//import server.model.UserService;
-//import server.storage.DBStorage;
-//import server.storage.Storage;
-//import server.todoItems.TodoItem;
-//import server.todoItems.TodoItemsRepository;
-//import server.todoItems.TodoItemsService;
-//import ui.Font;
-//import ui.Text;
-//import utility.DateUtils;
-//import utility.Utils;
-//
-//import java.util.ArrayList;
-//import java.util.Date;
-//import java.util.Scanner;
-//
-//public class Simulator {
-//    private Scanner scanner = new Scanner(System.in);
-//
-//    //TodoItemsRepository repository;
-//    //TodoItemsService itemsService;
-//
-//    private ArrayList<User> users = new ArrayList<>();
-//    private User currentUser = null;
-//    //private Storage storage;
-//    private Utils utils = new Utils();
-//    private DateUtils dateUtils = new DateUtils();
-//    private Font font = new Font();
-//    private Text text = new Text();
-//    private UserService userService= new UserService(new UserRepository());
-//
-//    public Simulator(){
-//        //storage = new DBStorage();
-//        //repository = new TodoItemsRepository();
-//        //itemsService = new TodoItemsService(this.repository);
-//    }
-//
-//    public void start() {
-//        signInUser();
-//        showMenu();
-//    }
-//
-//    private void signInUser() {
-//        if (isThereUser()) {
-//            User user = null;
-//
-//            while (user == null) {
-//                System.out.println("Welcome!\n1- Sign up as a new User\n2- Sign in as an already existing user");
-//                int inputChoice = utils.getInput("Please enter either 1 or 2", 1, 2);
-//
-//                if (inputChoice == 1) {
-//                    user = addNewUser(false);
-//                } else {
-//                    user = authenticateUser();
-//                }
-//                if (user == null) {
-//                    clearScreen();
-//                }
-//            }
-//            currentUser = user;
-//        } else {
-//            System.out.println("Welcome to our To-do List app, what is your name?");
-//            currentUser = addNewUser(true);
-//        }
-//
-//    }
-//
-//    private User authenticateUser() {
-//
-//        System.out.println("Enter you name to sign in. (Press 0 to return to main page)");
-//        String usersName = "";
-//
-//        User user = null;
-//        while (user == null) {
-//            usersName = utils.getInput("Please enter a valid name");
-//            if (usersName.trim().equals("0"))
-//                return null;
-//            user = getUserByUsername(usersName);
-//            if (user == null) {
-//                System.err.println("----------------------------ACCESS DENIED---------------------------\nThis name doesn't exist, try again. (Press 0 to return to main page)");
-//            }
-//
-//        }
-//        return user;
-//
-//    }
-//
-//    private User addNewUser(boolean isFirstTime) {
-//        if (!isFirstTime)
-//            System.out.println("Enter name of new user. (Press 0 to return to main page)");
-//        boolean uniqueUserNameEntered = false;
-//
-//        //check username exists
-//        //if not display message
-//        //else add user
-//        String usersName = "";
-//        while (!uniqueUserNameEntered) {
-//            usersName = utils.getInput("Please enter a valid name");
-//            if (usersName.trim().equals("0")) {
-//                return null;
-//            }
-//            if (getUserByUsername(usersName) == null)
-//                uniqueUserNameEntered = true;
-//            else {
-//                System.err.println("The name Entered already exists, please enter a new name. (Press 0 to return to main page)");
-//            }
-//        }
-//        User newUser = new User(usersName);
-//        users.add(newUser);
-//        userService.addUser(newUser.getName());
-//        return newUser;
-//        //ask youssef if break functionality must be added here
-//
-//    }
-//
-//    private User getUserByUsername(String name) {
-//        for (User user : users) {
-//            if (user.getName().equals(name)) {
-//                return user;
-//            }
-//        }
-//        return null;
-//    }
-//
-//    private boolean isThereUser() {
-//        //ArrayList<User> data = storage.loadData();
-//
-//        if (data.isEmpty())
-//            return false;
-//        else {
-//            users = data;
-//            return true;
-//        }
-//        //return false;
-//    }
-//
-//    private void setUserName() {
-//        utils.print("Hello, what is your name?");
-//        String name = utils.getInput("write a valid name");
-//        currentUser = new User(name);
-//    }
-//
-//    private void showMenu() {
-//
-//        while (true) {
-//            if (currentUser == null) {
-//                clearScreen();
-//                signInUser();
-//            }
-//            utils.PrintColoredMessage(font.ANSI_YELLOW, "\nWelcome " + currentUser.getName());
-//            text.menuOptions.forEach(System.out::println);
-//
-//            int option = utils.getInput("Invalid input", 1, 13);
-//            switch (option) {
-//                case 1:
-//                    TodoItem item = takeCreateItemFromUser();
-//                    if (item != null) {
-//                        currentUser.addTodoItem(item);
-//                        //itemsService.showAllTodoItems(currentUser.getItems());
-//                        itemsService.addTodoItem(currentUser.getName(), item);
-//                        saveFile();
-//                    }
-//                    break;
-//
-//                case 2:
-//                    takeUpdateItemFromUser();
-//                    saveFile();
-//                    break;
-//
-//                case 3:
-//                    deleteItemByUser();
-//                    saveFile();
-//                    break;
-//
-//                case 4:
-//                    itemsService.showAllTodoItems(currentUser.getItems());
-//                    break;
-//
-//                case 5:
-//                    currentUser.showTop5ItemsByDate();
-//                    break;
-//
-//                case 6:
-//                    search();
-//                    break;
-//
-//                case 7:
-//                    addItemToCategoryFromUser();
-//                    saveFile();
-//                    break;
-//
-//                case 8:
-//                    addItemToFavoriteFromUser();
-//                    saveFile();
-//                    break;
-//
-//                case 9:
-//                    itemsService.printFavorites(currentUser.getItems());
-//                    break;
-//
-//                case 10:
-//                    clearScreen();
-//                    break;
-//                case 11:
-//                    updateName();
-//                    break;
-//                case 12:
-//                    currentUser = null;
-//                    break;
-//                case 13:
-//                    saveFile();
-//                    System.exit(0);
-//                    break;
-//            }
-//        }
-//
-//    }
-//
+package client.app;
+
+import enums.Category;
+import enums.Priority;
+import enums.SearchKey;
+import server.model.User;
+import server.model.UserRepository;
+import server.model.UserService;
+import server.todoItems.TodoItem;
+import ui.Font;
+import ui.Text;
+import utility.DateUtils;
+import utility.UserUtils;
+import utility.Utils;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Scanner;
+
+public class Simulator {
+    private Scanner scanner;
+    private TodoListClient todoListClient;
+    private ArrayList<User> users;
+    private User currentUser = null;
+    private Utils utils;
+    private DateUtils dateUtils;
+    private UserUtils userUtils;
+    private Font font;
+    private Text text;
+    private UserService userService;
+
+    public Simulator(){
+        scanner = new Scanner(System.in);
+        todoListClient = new TodoListClient();
+        users = new ArrayList<>();
+        utils = new Utils();
+        dateUtils = new DateUtils();
+        userUtils = new UserUtils();
+        font = new Font();
+        text = new Text();
+        userService= new UserService(new UserRepository());
+    }
+
+    public void start() {
+        signInUser();
+        showMenu();
+    }
+
+    private void signInUser() {
+        if (isThereUser()) {
+            User user = null;
+
+            while (user == null) {
+                System.out.println("Welcome!\n1- Sign up as a new User\n2- Sign in as an already existing user");
+                int inputChoice = utils.getInput("Please enter either 1 or 2", 1, 2);
+
+                if (inputChoice == 1) {
+                    user = addNewUser(false);
+                } else {
+                    user = authenticateUser();
+                }
+                if (user == null) {
+                    clearScreen();
+                }
+            }
+            currentUser = user;
+        } else {
+            System.out.println("Welcome to our To-do List app, what is your name?");
+            currentUser = addNewUser(true);
+        }
+
+    }
+
+    private User authenticateUser() {
+
+        System.out.println("Enter you name to sign in. (Press 0 to return to main page)");
+        String usersName = "";
+
+        User user = null;
+        while (user == null) {
+            usersName = utils.getInput("Please enter a valid name");
+            if (usersName.trim().equals("0"))
+                return null;
+            user = getUserByUsername(usersName);
+            if (user == null) {
+                System.err.println("----------------------------ACCESS DENIED---------------------------\nThis name doesn't exist, try again. (Press 0 to return to main page)");
+            }
+
+        }
+        return user;
+
+    }
+
+    private User addNewUser(boolean isFirstTime) {
+        if (!isFirstTime)
+            System.out.println("Enter name of new user. (Press 0 to return to main page)");
+        boolean uniqueUserNameEntered = false;
+
+        //check username exists
+        //if not display message
+        //else add user
+        String usersName = "";
+        while (!uniqueUserNameEntered) {
+            usersName = utils.getInput("Please enter a valid name");
+            if (usersName.trim().equals("0")) {
+                return null;
+            }
+            if (getUserByUsername(usersName) == null)
+                uniqueUserNameEntered = true;
+            else {
+                System.err.println("The name Entered already exists, please enter a new name. (Press 0 to return to main page)");
+            }
+        }
+        User newUser = new User(usersName);
+        users.add(newUser);
+        userService.addUser(newUser.getName());
+        return newUser;
+        //ask youssef if break functionality must be added here
+
+    }
+
+    private User getUserByUsername(String name) {
+        for (User user : users) {
+            if (user.getName().equals(name)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    private boolean isThereUser() {
+        ArrayList<User> data = userUtils.loadData();
+        if (data.isEmpty())
+            return false;
+        else {
+            users = data;
+            return true;
+        }
+    }
+
+    private void setUserName() {
+        utils.print("Hello, what is your name?");
+        String name = utils.getInput("write a valid name");
+        currentUser = new User(name);
+    }
+
+    private void showMenu() {
+
+        while (true) {
+            if (currentUser == null) {
+                clearScreen();
+                signInUser();
+            }
+            utils.PrintColoredMessage(font.ANSI_YELLOW, "\nWelcome " + currentUser.getName());
+            text.menuOptions.forEach(System.out::println);
+
+            int option = utils.getInput("Invalid input", 1, 13);
+            switch (option) {
+                case 1:
+                    //TodoItem item = takeCreateItemFromUser();
+                    TodoItem item = new TodoItem();
+                    if (item != null) {
+                        // add item endpoint
+                        todoListClient.getItems(currentUser.getName()).forEach(System.out::println);
+                    }
+                    break;
+
+                case 2:
+                    // update item endpoint
+                    break;
+
+                case 3:
+                    // delete item endpoint
+                    break;
+
+                case 4:
+                    todoListClient.getItems(currentUser.getName()).forEach(System.out::println);
+                    break;
+
+                case 5:
+                    todoListClient.getLatestItems(currentUser.getName()).forEach(System.out::println);
+                    break;
+
+                case 6:
+                    //search();
+                    break;
+
+                case 7:
+                    // add item to category endpoint
+                    break;
+
+                case 8:
+                    // add item to fav endpoint
+                    break;
+
+                case 9:
+                    todoListClient.getFavorites(currentUser.getName()).forEach(System.out::println);
+
+                    break;
+
+                case 10:
+                    clearScreen();
+                    break;
+                case 11:
+                    updateName();
+                    break;
+                case 12:
+                    currentUser = null;
+                    break;
+                case 13:
+                    System.exit(0);
+                    break;
+            }
+        }
+
+    }
+
 //    private TodoItem takeCreateItemFromUser() {
 //        utils.print("Enter new data...");
 //
@@ -265,26 +258,26 @@
 //
 //        return new TodoItem(title, description, priority, category, startDate, endDate);
 //    }
-//
-//    private int updateIsConfirmed(String itemToBeUpdated) {
-//        System.out.println("choose 1 if you want to update the " + itemToBeUpdated + " and 2 if you don't want to update it");
-//        String userInput = scanner.next();
-//        while (!userInput.equals("1") && !userInput.equals("2") && !userInput.equalsIgnoreCase("/back")) {
-//            System.out.println("invalid choice");
-//            userInput = scanner.next();
-//        }
-//        switch (userInput) {
-//            case "1":
-//                return 1;
-//            case "2":
-//                return 2;
-//            case "/back":
-//                return -1;
-//            default:
-//                return 0;
-//        }
-//    }
-//
+
+    private int updateIsConfirmed(String itemToBeUpdated) {
+        System.out.println("choose 1 if you want to update the " + itemToBeUpdated + " and 2 if you don't want to update it");
+        String userInput = scanner.next();
+        while (!userInput.equals("1") && !userInput.equals("2") && !userInput.equalsIgnoreCase("/back")) {
+            System.out.println("invalid choice");
+            userInput = scanner.next();
+        }
+        switch (userInput) {
+            case "1":
+                return 1;
+            case "2":
+                return 2;
+            case "/back":
+                return -1;
+            default:
+                return 0;
+        }
+    }
+
 //    private String validateGetTitle(String oldTitle) {// used to make sure that user input(string) is not empty or not only just ' ' character
 //        String title = scanner.nextLine();
 //        if (title.equalsIgnoreCase("/back")) return title;
@@ -300,35 +293,35 @@
 //        }
 //        return title;
 //    }
-//
-//    private String getExistingTitle(String messageSpecifier) {
-//        String title = "";
-//        while (true) {
-//            System.out.println("Enter title of item to be added to " + messageSpecifier);
-//            title = utils.getInput("invalid title");
-//            if (title.equalsIgnoreCase("/back")) return title;
-//            if (currentUser.itemExists(title)) break;
-//            System.err.println("Item doesn't exist");
-//        }
-//        return title;
-//    }
-//
-//    private String getOldTitleFromUser() {
-//        while (true) {
-//            utils.print("Enter title of item to be updated:");
-//            String oldTitle = scanner.nextLine();
-//            if (oldTitle.equalsIgnoreCase("/back")) return oldTitle;
-//            if (currentUser.itemExists(oldTitle)) {
-//                return oldTitle;
-//            }
-//            if (oldTitle.matches(" +") || oldTitle.isEmpty()) {
-//                System.err.println("Please enter a valid title");
-//            } else {
-//                System.err.println("Title entered doesn't exist");
-//            }
-//        }
-//    }
-//
+
+    private String getExistingTitle(String messageSpecifier) {
+        String title = "";
+        while (true) {
+            System.out.println("Enter title of item to be added to " + messageSpecifier);
+            title = utils.getInput("invalid title");
+            if (title.equalsIgnoreCase("/back")) return title;
+            if (currentUser.itemExists(title)) break;
+            System.err.println("Item doesn't exist");
+        }
+        return title;
+    }
+
+    private String getOldTitleFromUser() {
+        while (true) {
+            utils.print("Enter title of item to be updated:");
+            String oldTitle = scanner.nextLine();
+            if (oldTitle.equalsIgnoreCase("/back")) return oldTitle;
+            if (currentUser.itemExists(oldTitle)) {
+                return oldTitle;
+            }
+            if (oldTitle.matches(" +") || oldTitle.isEmpty()) {
+                System.err.println("Please enter a valid title");
+            } else {
+                System.err.println("Title entered doesn't exist");
+            }
+        }
+    }
+
 //    private void takeUpdateItemFromUser() {
 //        String oldTitle = getOldTitleFromUser();
 //        if (oldTitle.equalsIgnoreCase("/back")) return;
@@ -504,34 +497,30 @@
 //        //currentUser.addItemToFavorite(title);
 //        itemsService.addItemToFavorite(currentUser.getName(),title);
 //    }
-//
-//    private void updateName() {
-//        System.out.println("Please type in your new name");
-//
-//        String name = "";
-//        boolean uniqueNameEntered = false;
-//        while (!uniqueNameEntered) {
-//            name = utils.getInput("Please enter a valid name");
-//            if (name.equalsIgnoreCase("/back"))
-//                return;
-//            else if (getUserByUsername(name) == null)
-//                uniqueNameEntered = true;
-//            else {
-//                System.err.println("The name entered already exists, please try again");
-//            }
-//        }
-//        boolean result = userService.updateUsersName(currentUser.getName(),name);
-//        if(result)
-//            currentUser.setName(name);
-//
-//    }
-//
-//    private void clearScreen() {
-//        for (int i = 0; i < 50; ++i) System.out.println();
-//    }
-//
-//    private void saveFile() {
-//        storage.saveData(users);
-//    }
-//
-//}
+
+    private void updateName() {
+        System.out.println("Please type in your new name");
+
+        String name = "";
+        boolean uniqueNameEntered = false;
+        while (!uniqueNameEntered) {
+            name = utils.getInput("Please enter a valid name");
+            if (name.equalsIgnoreCase("/back"))
+                return;
+            else if (getUserByUsername(name) == null)
+                uniqueNameEntered = true;
+            else {
+                System.err.println("The name entered already exists, please try again");
+            }
+        }
+        boolean result = userService.updateUsersName(currentUser.getName(),name);
+        if(result)
+            currentUser.setName(name);
+
+    }
+
+    private void clearScreen() {
+        for (int i = 0; i < 50; ++i) System.out.println();
+    }
+
+}

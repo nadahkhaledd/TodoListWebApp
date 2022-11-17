@@ -14,12 +14,10 @@ public class UserClient {
             = "http://localhost:8080/TodoListWebApp/webapi";
     private final Client client = ClientBuilder.newClient();
 
-    public ArrayList<TodoItem> getUserNames(){
-        ArrayList arrayList = (ArrayList) client.target(REST_URI)
+    public ArrayList<String> getUserNames(){
+        return (ArrayList) client.target(REST_URI)
                 .path("get").path("usernames")
                 .request(MediaType.APPLICATION_JSON)
                 .get(Response.class).getItemsToBeReturned();
-
-        return arrayList;
     }
 }
