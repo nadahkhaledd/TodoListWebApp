@@ -37,7 +37,7 @@ public class userOperationsController {
         ArrayList<TodoItem> todoItems=todoItemsService.getTodosFromDB(repository.getUserLatestTodos(username));
         if (todoItems.isEmpty())
             return new Response("no items found for this user",204, new ArrayList<String>());
-        return new Response("OK",200,utils.convertItemsToJson(todoItems));
+        return new Response("OK",200, utils.convertItemsToJson(todoItems));
     }
 
     @GET
