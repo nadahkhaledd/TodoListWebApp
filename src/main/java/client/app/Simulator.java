@@ -161,7 +161,7 @@ public class Simulator {
                     TodoItem item = new TodoItem();
                     if (item != null) {
                         // add item endpoint
-                        todoListClient.getItems(currentUser.getName()).forEach(System.out::println);
+                        todoListClient.get(currentUser.getName(), "useritems").forEach(System.out::println);
                     }
                     break;
 
@@ -174,11 +174,11 @@ public class Simulator {
                     break;
 
                 case 4:
-                    todoListClient.getItems(currentUser.getName()).forEach(System.out::println);
+                    todoListClient.get(currentUser.getName(), "useritems").forEach(System.out::println);
                     break;
 
                 case 5:
-                    todoListClient.getLatestItems(currentUser.getName()).forEach(System.out::println);
+                    todoListClient.get(currentUser.getName(), "userlatest").forEach(System.out::println);
                     break;
 
                 case 6:
@@ -194,7 +194,7 @@ public class Simulator {
                     break;
 
                 case 9:
-                    todoListClient.getFavorites(currentUser.getName()).forEach(System.out::println);
+                    todoListClient.get(currentUser.getName(), "userfavorites").forEach(System.out::println);
 
                     break;
 

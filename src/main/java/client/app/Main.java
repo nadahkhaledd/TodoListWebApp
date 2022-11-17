@@ -14,7 +14,7 @@ public class Main {
 
         TodoListClient todoListClient = new TodoListClient();
 
-        ArrayList<TodoItem> result = todoListClient.getLatestItems("nadah");
+        ArrayList<TodoItem> result = todoListClient.get("nadah", "userlatest");
 
         result.forEach(System.out::println);
 
