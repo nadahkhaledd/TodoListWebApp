@@ -136,6 +136,7 @@ public class Simulator {
             users = data;
             return true;
         }
+        //return false;
     }
 
     private void setUserName() {
@@ -166,11 +167,12 @@ public class Simulator {
                     break;
 
                 case 2:
-                    // update item endpoint
+                    takeUpdateItemFromUser();
                     break;
 
                 case 3:
-                    // delete item endpoint
+                    deleteItemByUser();
+                    saveFile();
                     break;
 
                 case 4:
@@ -186,16 +188,15 @@ public class Simulator {
                     break;
 
                 case 7:
-                    // add item to category endpoint
+                    addItemToCategoryFromUser();
                     break;
 
                 case 8:
-                    // add item to fav endpoint
+                    addItemToFavoriteFromUser();
                     break;
 
                 case 9:
                     todoListClient.get(currentUser.getName(), "userfavorites").forEach(System.out::println);
-
                     break;
 
                 case 10:
@@ -278,21 +279,21 @@ public class Simulator {
         }
     }
 
-//    private String validateGetTitle(String oldTitle) {// used to make sure that user input(string) is not empty or not only just ' ' character
-//        String title = scanner.nextLine();
-//        if (title.equalsIgnoreCase("/back")) return title;
-//        boolean titleAlreadyExists = (itemsService.getItemByTitle(title.trim(), currentUser.getItems()) != -1 && !oldTitle.equalsIgnoreCase(title.trim()));
-//
-//        while (title.matches(" +") || title.isEmpty() || titleAlreadyExists) {// used to make sure that user input(string) is not empty or not only just ' ' character and title doesn't exist
-//            if (titleAlreadyExists)
-//                utils.print("title already exists re-enter title");
-//            else if (title.matches(" +") || title.isEmpty())
-//                utils.print("invalid title");
-//            title = scanner.nextLine();
-//            titleAlreadyExists = (itemsService.getItemByTitle(title.trim(), currentUser.getItems()) != -1 && !oldTitle.equalsIgnoreCase(title.trim()));
-//        }
-//        return title;
-//    }
+    private String validateGetTitle(String oldTitle) {// used to make sure that user input(string) is not empty or not only just ' ' character
+        String title = scanner.nextLine();
+        if (title.equalsIgnoreCase("/back")) return title;
+        boolean titleAlreadyExists = (utils.getItemByTitle(title.trim(), currentUser.getItems()) != -1 && !oldTitle.equalsIgnoreCase(title.trim()));
+
+        while (title.matches(" +") || title.isEmpty() || titleAlreadyExists) {// used to make sure that user input(string) is not empty or not only just ' ' character and title doesn't exist
+            if (titleAlreadyExists)
+                utils.print("title already exists re-enter title");
+            else if (title.matches(" +") || title.isEmpty())
+                utils.print("invalid title");
+            title = scanner.nextLine();
+            titleAlreadyExists = (utils.getItemByTitle(title.trim(), currentUser.getItems()) != -1 && !oldTitle.equalsIgnoreCase(title.trim()));
+        }
+        return title;
+    }
 
     private String getExistingTitle(String messageSpecifier) {
         String title = "";
@@ -322,95 +323,97 @@ public class Simulator {
         }
     }
 
-//    private void takeUpdateItemFromUser() {
-//        String oldTitle = getOldTitleFromUser();
-//        if (oldTitle.equalsIgnoreCase("/back")) return;
-//        int itemIndex = itemsService.getItemByTitle(oldTitle, currentUser.getItems());
-//        TodoItem item = currentUser.getItems().get(itemIndex).clone();
-//
-//        System.out.println("Enter new data...");
-//        int confirmUpdate;
-//
-//        confirmUpdate = updateIsConfirmed("title");
-//        if (confirmUpdate == 1) {
-//            utils.print("Enter title:");
-//            String title = validateGetTitle(oldTitle);//data.nextLine();
-//            item.setTitle(title);
-//        } else if (confirmUpdate == -1) return;
-//
-//        confirmUpdate = updateIsConfirmed("description");
-//        if (confirmUpdate == 1) {
-//            utils.print("Enter description:");
-//            String description = utils.getInput("enter a valid description");//data.nextLine();
-//            item.setDescription(description);
-//        } else if (confirmUpdate == -1) return;
-//
-//        confirmUpdate = updateIsConfirmed("priority");
-//        if (confirmUpdate == 1) {
-//            utils.print(text.choosePriority);
-//            int userPriorityChoice = utils.getInput(
-//                    "invalid choice.\n" + text.choosePriority, 1, 3
-//            );
-//            Priority priority = (userPriorityChoice == 1) ? Priority.Low :
-//                    ((userPriorityChoice == 2) ? Priority.Medium : Priority.High);
-//            item.setPriority(priority);
-//        } else if (confirmUpdate == -1) return;
-//
-//        confirmUpdate = updateIsConfirmed("category");
-//        if (confirmUpdate == 1) {
-//            utils.print(text.chooseCategory);
-//            int userCategoryChoice = utils.getInput("invalid input.\n" +
-//                    text.chooseCategory, 1, 6);
-//            Category category = text.categories.get(userCategoryChoice - 1);
-//            item.setCategory(category);
-//        } else if (confirmUpdate == -1) return;
-//
-//        boolean startDatePassedEndDate = false;
-//        confirmUpdate = updateIsConfirmed("start date");
-//        if (confirmUpdate == 1) {
-//            utils.print(text.enterStartDate);
-//            String startDateString = scanner.nextLine();
-//            while (!dateUtils.isValidDate(startDateString)) {
-//                utils.print(text.enterStartDate);
-//                startDateString = scanner.nextLine();
-//            }
-//            Date startDate = dateUtils.convertStringToDate(startDateString);
-//            //item.setStartDate(startDate);
-//
-//            startDatePassedEndDate = startDate.compareTo(item.getEndDate()) == 1;
-//            if (startDatePassedEndDate) {
-//                System.out.println("The start date entered passes the end date," +
-//                        " are you sure you want to change it?  (1-Yes , 2-No)");
-//                int choice = utils.getInput("Enter a valid choice", 1, 2);
-//                if (choice == 1) {
-//                    item.setStartDate(startDate);
-//                } else {
-//                    startDatePassedEndDate = false;
-//                }
-//            }
-//        } else if (confirmUpdate == -1) return;
-//
-//        confirmUpdate = updateIsConfirmed("end date");
-//        if (startDatePassedEndDate || confirmUpdate == 1) {
-//            utils.print(text.enterEndDate);
-//            String endDateString = scanner.nextLine();
-//            while (!dateUtils.isValidEndDate(item.getStartDate(), endDateString)) {
-//                utils.print(text.enterEndDate);
-//                endDateString = scanner.nextLine();
-//            }
-//            Date endDate = dateUtils.convertStringToDate(endDateString);
-//            item.setEndDate(endDate);
-//
-//
-//        } else if (confirmUpdate == -1) return;
-//
-//        boolean updated = itemsService.updateTodoItem(currentUser.getName(), item, oldTitle);
-//        if (updated) {
-//            currentUser.getItems().get(itemIndex).updateNewItem(item);
-//            System.out.println("Item updated:\n" + item.toString());
-//        }
-//    }
-//
+    private void takeUpdateItemFromUser() {
+        String oldTitle = getOldTitleFromUser();
+        if (oldTitle.equalsIgnoreCase("/back")) return;
+        int itemIndex = utils.getItemByTitle(oldTitle, currentUser.getItems());
+        TodoItem item = currentUser.getItems().get(itemIndex).clone();
+
+        System.out.println("Enter new data...");
+        int confirmUpdate;
+
+        confirmUpdate = updateIsConfirmed("title");
+        if (confirmUpdate == 1) {
+            utils.print("Enter title:");
+            String title = validateGetTitle(oldTitle);//data.nextLine();
+            item.setTitle(title);
+        } else if (confirmUpdate == -1) return;
+
+        confirmUpdate = updateIsConfirmed("description");
+        if (confirmUpdate == 1) {
+            utils.print("Enter description:");
+            String description = utils.getInput("enter a valid description");//data.nextLine();
+            item.setDescription(description);
+        } else if (confirmUpdate == -1) return;
+
+        confirmUpdate = updateIsConfirmed("priority");
+        if (confirmUpdate == 1) {
+            utils.print(text.choosePriority);
+            int userPriorityChoice = utils.getInput(
+                    "invalid choice.\n" + text.choosePriority, 1, 3
+            );
+            Priority priority = (userPriorityChoice == 1) ? Priority.Low :
+                    ((userPriorityChoice == 2) ? Priority.Medium : Priority.High);
+            item.setPriority(priority);
+        } else if (confirmUpdate == -1) return;
+
+        confirmUpdate = updateIsConfirmed("category");
+        if (confirmUpdate == 1) {
+            utils.print(text.chooseCategory);
+            int userCategoryChoice = utils.getInput("invalid input.\n" +
+                    text.chooseCategory, 1, 6);
+            Category category = text.categories.get(userCategoryChoice - 1);
+            item.setCategory(category);
+        } else if (confirmUpdate == -1) return;
+
+        boolean startDatePassedEndDate = false;
+        confirmUpdate = updateIsConfirmed("start date");
+        if (confirmUpdate == 1) {
+            utils.print(text.enterStartDate);
+            String startDateString = scanner.nextLine();
+            while (!dateUtils.isValidDate(startDateString)) {
+                utils.print(text.enterStartDate);
+                startDateString = scanner.nextLine();
+            }
+            Date startDate = dateUtils.convertStringToDate(startDateString);
+            //item.setStartDate(startDate);
+
+            startDatePassedEndDate = startDate.compareTo(item.getEndDate()) == 1;
+            if (startDatePassedEndDate) {
+                System.out.println("The start date entered passes the end date," +
+                        " are you sure you want to change it?  (1-Yes , 2-No)");
+                int choice = utils.getInput("Enter a valid choice", 1, 2);
+                if (choice == 1) {
+                    item.setStartDate(startDate);
+                } else {
+                    startDatePassedEndDate = false;
+                }
+            }
+        } else if (confirmUpdate == -1) return;
+
+        confirmUpdate = updateIsConfirmed("end date");
+        if (startDatePassedEndDate || confirmUpdate == 1) {
+            utils.print(text.enterEndDate);
+            String endDateString = scanner.nextLine();
+            while (!dateUtils.isValidEndDate(item.getStartDate(), endDateString)) {
+                utils.print(text.enterEndDate);
+                endDateString = scanner.nextLine();
+            }
+            Date endDate = dateUtils.convertStringToDate(endDateString);
+            item.setEndDate(endDate);
+
+
+        } else if (confirmUpdate == -1) return;
+
+        //boolean updated = itemsService.updateTodoItem(currentUser.getName(), item, oldTitle);
+        boolean updated = TodoItemUpdateClient.getInstance()
+                .updateTodoItem(currentUser.getName(), item,oldTitle);
+        if (updated) {
+            currentUser.getItems().get(itemIndex).updateNewItem(item);
+            System.out.println("Item updated:\n" + item.toString());
+        }
+    }
+
 //    private void deleteItemByUser() {
 //        if (currentUser.getItems().isEmpty())
 //            utils.PrintColoredMessage(font.ANSI_RED, "No items available");
@@ -418,13 +421,12 @@ public class Simulator {
 //            utils.print("Enter title of item to be deleted:");
 //            String title = utils.getInput("invalid title");
 //            if (title.equalsIgnoreCase("/back")) return;
-//            //  itemsService.deleteTodoItem(title, currentUser.getItems());
-//            itemsService.deleteTodoItem(title, currentUser.getName());
+//            itemsService.deleteTodoItem(title, currentUser.getItems());
 //            //  currentUser.deleteTodoItem(title);
 //
 //        }
 //    }
-//
+
 //    private void search() {
 //        boolean isSearchKeyValid = false;
 //        while (!isSearchKeyValid) {
@@ -480,23 +482,37 @@ public class Simulator {
 //            }
 //        }
 //    }
-//
-//    private void addItemToCategoryFromUser() {
-//        String title = getExistingTitle("Category");
-//        utils.print(text.chooseCategory);
-//        int userCategoryChoice = utils.getInput("invalid input.\n" +
-//                text.chooseCategory, 1, 6);
-//        Category category = text.categories.get(userCategoryChoice-1);
-//        //currentUser.addItemToCategory(title,category);
-//        itemsService.addItemToCategory(currentUser.getName(),title,category);
-//    }
-//
-//    private void addItemToFavoriteFromUser() {
-//        String title = getExistingTitle("Favorites");
-//        if(title.equalsIgnoreCase("/back")) return;
-//        //currentUser.addItemToFavorite(title);
-//        itemsService.addItemToFavorite(currentUser.getName(),title);
-//    }
+
+    private void addItemToCategoryFromUser() {
+        String title = getExistingTitle("Category");
+        utils.print(text.chooseCategory);
+        int userCategoryChoice = utils.getInput("invalid input.\n" +
+                text.chooseCategory, 1, 6);
+        Category category = text.categories.get(userCategoryChoice-1);
+        //currentUser.addItemToCategory(title,category);
+        //itemsService.addItemToCategory(currentUser.getName(),title,category);
+        boolean updated = TodoItemUpdateClient.getInstance()
+                        .addItemToCategory(currentUser.getName(),title,category );
+        if(updated){
+            int itemIndex = utils.getItemByTitle(title,currentUser.getItems());
+            currentUser.getItems().get(itemIndex).setCategory(category);
+            System.out.println("ADDED TO CATEGORY SUCCESSFULLY");
+        }
+    }
+
+    private void addItemToFavoriteFromUser() {
+        String title = getExistingTitle("Favorites");
+        if(title.equalsIgnoreCase("/back")) return;
+        currentUser.addItemToFavorite(title);
+        //itemsService.addItemToFavorite(currentUser.getName(),title);
+        boolean updated = TodoItemUpdateClient.getInstance()
+                .addItemToFavorites(currentUser.getName(), title);
+        if(updated){
+            int itemIndex = utils.getItemByTitle(title, currentUser.getItems());
+            currentUser.getItems().get(itemIndex).setFavorite(true);
+            System.out.println("ADDED TO FAVORITES SUCCESSFULLY");
+        }
+    }
 
     private void updateName() {
         System.out.println("Please type in your new name");
@@ -513,8 +529,9 @@ public class Simulator {
                 System.err.println("The name entered already exists, please try again");
             }
         }
-        boolean result = userService.updateUsersName(currentUser.getName(),name);
-        if(result)
+        boolean updated = UserUpdateClient.getInstance()
+                        .updateUsersName(currentUser.getName(),name);
+        if(updated)
             currentUser.setName(name);
 
     }

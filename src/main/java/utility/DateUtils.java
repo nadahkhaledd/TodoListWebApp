@@ -61,4 +61,17 @@ public class DateUtils {
         Date formattedDate = convertStringToDate(DateFormat.format(date));
         return formattedDate;
     }
+    public String convertDateToString(Date date){
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = df.format(date);
+        return dateString;
+    }
+
+    public Date convertStringToSQLDate(String dateString){
+        try {
+            return new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
