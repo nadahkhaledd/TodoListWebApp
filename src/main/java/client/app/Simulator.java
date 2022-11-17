@@ -190,12 +190,13 @@ public class Simulator {
                     break;
 
                 case 7:
-                      // UserUpdateClient.
-                  //  addItemToCategoryFromUser();
+                    addItemToCategoryFromUser();
+
                     break;
 
                 case 8:
-                 //   addItemToFavoriteFromUser();
+                    addItemToFavoriteFromUser();
+
                     break;
 
                 case 9:
@@ -486,28 +487,43 @@ private void search() {
             case "/back":
                 return;
 
-            default:
-                System.err.println("Invalid input.");
-                break;
+                default:
+                    System.err.println("Invalid input.");
+                    break;
+            }
         }
     }
-}
-//    private void addItemToCategoryFromUser() {
-//        String title = getExistingTitle("Category");
-//        utils.print(text.chooseCategory);
-//        int userCategoryChoice = utils.getInput("invalid input.\n" +
-//                text.chooseCategory, 1, 6);
-//        Category category = text.categories.get(userCategoryChoice-1);
-//        //currentUser.addItemToCategory(title,category);
-//        itemsService.addItemToCategory(currentUser.getName(),title,category);
-//    }
-//
-//    private void addItemToFavoriteFromUser() {
-//        String title = getExistingTitle("Favorites");
-//        if(title.equalsIgnoreCase("/back")) return;
-//        //currentUser.addItemToFavorite(title);
-//        itemsService.addItemToFavorite(currentUser.getName(),title);
-//    }
+
+    private void addItemToCategoryFromUser() {
+        String title = getExistingTitle("Category");
+        utils.print(text.chooseCategory);
+        int userCategoryChoice = utils.getInput("invalid input.\n" +
+                text.chooseCategory, 1, 6);
+        Category category = text.categories.get(userCategoryChoice-1);
+        //currentUser.addItemToCategory(title,category);
+        //itemsService.addItemToCategory(currentUser.getName(),title,category);
+        boolean updated = TodoItemUpdateClient.getInstance()
+                        .addItemToCategory(currentUser.getName(),title,category );
+        if(updated){
+            int itemIndex = utils.getItemByTitle(title,currentUser.getItems());
+            currentUser.getItems().get(itemIndex).setCategory(category);
+            System.out.println("ADDED TO CATEGORY SUCCESSFULLY");
+        }
+    }
+
+    private void addItemToFavoriteFromUser() {
+        String title = getExistingTitle("Favorites");
+        if(title.equalsIgnoreCase("/back")) return;
+        currentUser.addItemToFavorite(title);
+        //itemsService.addItemToFavorite(currentUser.getName(),title);
+        boolean updated = TodoItemUpdateClient.getInstance()
+                .addItemToFavorites(currentUser.getName(), title);
+        if(updated){
+            int itemIndex = utils.getItemByTitle(title, currentUser.getItems());
+            currentUser.getItems().get(itemIndex).setFavorite(true);
+            System.out.println("ADDED TO FAVORITES SUCCESSFULLY");
+        }
+    }
 
     private void updateName() {
         System.out.println("Please type in your new name");
