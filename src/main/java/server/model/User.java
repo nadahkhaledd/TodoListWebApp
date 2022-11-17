@@ -1,4 +1,4 @@
-package server.user;
+package server.model;
 
 import enums.Category;
 import server.todoItems.TodoItem;

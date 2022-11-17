@@ -5,8 +5,8 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-import server.user.UserRepository;
-import server.user.UserService;
+import server.model.UserRepository;
+import server.model.UserService;
 
 import java.util.Map;
 

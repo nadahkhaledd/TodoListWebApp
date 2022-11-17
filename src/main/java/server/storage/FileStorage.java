@@ -1,6 +1,6 @@
 package server.storage;
 
-import server.user.User;
+import server.model.User;
 
 import java.io.*;
 import java.util.ArrayList;

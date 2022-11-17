@@ -33,38 +33,10 @@ public class Utils {
         }
         return userInput;
     }
-    public ArrayList<String> convertItemsToJson(ArrayList<TodoItem> items){
-        ObjectMapper mapper = new ObjectMapper();
-        ArrayList<String> toJson = new ArrayList<>();
 
 
 
-        for (TodoItem item: items) {
-            try {
-                toJson.add(mapper.writeValueAsString(item));
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return toJson;
-    }
 
-
-
-    public ArrayList<TodoItem> jsonToTodos(ArrayList<String> list){
-        ObjectMapper mapper = new ObjectMapper();
-        ArrayList<TodoItem> items = new ArrayList<>();
-        try {
-            for(String l : list){
-                TodoItem obj = mapper.readValue(l, TodoItem.class);
-                items.add(obj);
-            }
-        }
-        catch (IOException e){
-            System.out.println(e.getMessage());
-        }
-        return items;
-    }
     public int getInput(String message, int startLimit, int endLimit) {
         String userInput = data.nextLine();
         userInput = userInput.trim();

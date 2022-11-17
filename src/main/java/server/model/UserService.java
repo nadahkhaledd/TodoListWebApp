@@ -1,4 +1,4 @@
-package server.user;
+package server.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
