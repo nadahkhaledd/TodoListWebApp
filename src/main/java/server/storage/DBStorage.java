@@ -1,8 +1,8 @@
 package server.storage;
 
-import server.model.User;
-import server.model.UserRepository;
-import server.model.UserService;
+import server.user.User;
+import server.user.UserRepository;
+import server.user.UserService;
 import server.todoItems.TodoItemsRepository;
 import server.todoItems.TodoItemsService;
 import java.util.ArrayList;

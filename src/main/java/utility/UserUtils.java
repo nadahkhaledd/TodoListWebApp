@@ -2,7 +2,7 @@ package utility;
 
 import client.app.TodoListClient;
 import client.app.UserClient;
-import server.model.User;
+import server.user.User;
 import server.todoItems.TodoItem;
 
 import java.util.ArrayList;

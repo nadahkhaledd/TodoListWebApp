@@ -35,8 +35,6 @@ public class Utils {
     }
 
 
-
-
     public int getInput(String message, int startLimit, int endLimit) {
         String userInput = data.nextLine();
         userInput = userInput.trim();
