@@ -171,8 +171,8 @@ public class Simulator {
                     break;
 
                 case 3:
-                    deleteItemByUser();
-                    saveFile();
+                    //deleteItemByUser();
+                    //saveFile();
                     break;
 
                 case 4:
