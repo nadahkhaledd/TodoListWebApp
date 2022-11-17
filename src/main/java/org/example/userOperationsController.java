@@ -26,7 +26,7 @@ public class userOperationsController {
     public Response getUserItems(@QueryParam("username") String username){
         ArrayList<TodoItem> todoItems=todoItemsService.getTodosFromDB(repository.getUserTodos(username));
         if (todoItems.isEmpty())
-            return new Response("no items found for this user",204,new ArrayList<String>());
+            return new Response("no items found for this user",204, new ArrayList<String>());
         return new Response("OK",200,utils.convertItemsToJson(todoItems));
     }
 
@@ -34,20 +34,20 @@ public class userOperationsController {
     @Path("userlatest")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getUserLatestItems(@QueryParam("username") String username){
-        List<TodoItem> todoItems=todoItemsService.getTodosFromDB(repository.getUserLatestTodos(username));
+        ArrayList<TodoItem> todoItems=todoItemsService.getTodosFromDB(repository.getUserLatestTodos(username));
         if (todoItems.isEmpty())
-            return new Response("no items found for this user",204,todoItems);
-        return new Response("OK",200,todoItems);
+            return new Response("no items found for this user",204, new ArrayList<String>());
+        return new Response("OK",200,utils.convertItemsToJson(todoItems));
     }
 
     @GET
     @Path("userfavorites")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getUserFavorites(@QueryParam("username") String username){
-        List<TodoItem> todoItems=todoItemsService.getTodosFromDB(repository.getFavorites(username));
+        ArrayList<TodoItem> todoItems=todoItemsService.getTodosFromDB(repository.getFavorites(username));
         if (todoItems.isEmpty())
-            return new Response("no items found for this user",204,todoItems);
-        return new Response("OK",200,todoItems);
+            return new Response("no items found for this user",204, new ArrayList<String>());
+        return new Response("OK",200,utils.convertItemsToJson(todoItems));
     }
 
 

@@ -26,11 +26,10 @@ public class TodoListClient {
 
     private static final String REST_URI
             = "http://localhost:8080/TodoListWebApp/webapi";
-
     private final Client client = ClientBuilder.newClient();
 
 
-    public ArrayList<TodoItem> getAll(String username){
+    public ArrayList<TodoItem> getItems(String username){
         ArrayList arrayList = (ArrayList) client.target(REST_URI)
                 .path("get").path("useritems").queryParam("username", username)
                 .request(MediaType.APPLICATION_JSON)
@@ -39,8 +38,22 @@ public class TodoListClient {
         return utils.jsonToTodos(arrayList);
     }
 
+    public ArrayList<TodoItem> getLatestItems(String username){
+        ArrayList arrayList = (ArrayList) client.target(REST_URI)
+                .path("get").path("userlatest").queryParam("username", username)
+                .request(MediaType.APPLICATION_JSON)
+                .get(Response.class).getItemsToBeReturned();
 
+        return utils.jsonToTodos(arrayList);
+    }
 
+    public ArrayList<TodoItem> getFavorites(String username){
+        ArrayList arrayList = (ArrayList) client.target(REST_URI)
+                .path("get").path("userfavorites").queryParam("username", username)
+                .request(MediaType.APPLICATION_JSON)
+                .get(Response.class).getItemsToBeReturned();
 
+        return utils.jsonToTodos(arrayList);
+    }
 
 }
