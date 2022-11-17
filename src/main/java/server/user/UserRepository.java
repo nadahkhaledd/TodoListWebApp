@@ -1,4 +1,4 @@
-package server.model;
+package server.user;
 
 import server.connection.DBConnection;
 
@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 public class UserRepository {
     Connection connection;

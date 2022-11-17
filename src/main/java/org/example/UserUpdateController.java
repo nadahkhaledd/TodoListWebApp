@@ -2,10 +2,8 @@ package org.example;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import server.model.UserRepository;
-import server.model.UserService;
-
-import java.util.Map;
+import server.user.UserRepository;
+import server.user.UserService;
 
 @Path("/{name}")
 public class UserUpdateController {
