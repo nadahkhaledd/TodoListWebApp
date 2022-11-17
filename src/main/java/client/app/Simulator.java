@@ -3,9 +3,9 @@ package client.app;
 import enums.Category;
 import enums.Priority;
 import enums.SearchKey;
-import server.model.User;
-import server.model.UserRepository;
-import server.model.UserService;
+import server.user.UserRepository;
+import server.user.UserService;
+import server.user.User;
 import server.todoItems.TodoItem;
 import server.todoItems.TodoItemsRepository;
 import server.todoItems.TodoItemsService;
@@ -186,7 +186,7 @@ public class Simulator {
                     break;
 
                 case 6:
-                    search();
+                    //search();
                     break;
 
                 case 7:

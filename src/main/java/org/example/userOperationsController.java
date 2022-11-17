@@ -5,15 +5,14 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
-import server.model.UserRepository;
-import server.model.UserService;
+import server.user.UserRepository;
+import server.user.UserService;
 import server.todoItems.TodoItem;
 import server.todoItems.TodoItemsRepository;
 import server.todoItems.TodoItemsService;
 import utility.Utils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Path("get")
 public class userOperationsController {
