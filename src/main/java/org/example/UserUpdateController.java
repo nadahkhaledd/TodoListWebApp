@@ -12,7 +12,7 @@ public class UserUpdateController {
     UserService userService = new UserService(new UserRepository());
 
     /**
-     * Accepts JSON object of the form {"newName":"newName"}
+     * Accepts a string of the new name
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
