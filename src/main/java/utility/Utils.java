@@ -1,10 +1,11 @@
 package utility;
 
+import server.todoItems.TodoItem;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import server.todoItems.TodoItem;
 import ui.Font;
 
+import java.util.HashMap;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -111,4 +112,26 @@ public class Utils {
         return items;
     }
 
+
+    public HashMap<String,String> todoItemToMap(TodoItem todoItem){
+        DateUtils dateUtils = new DateUtils();
+
+        HashMap<String,String> todoItemMap = new HashMap<>();
+        todoItemMap.put("title",todoItem.getTitle());
+        todoItemMap.put("description",todoItem.getDescription());
+        todoItemMap.put("priority",todoItem.getPriority().toString());
+        todoItemMap.put("category",todoItem.getCategory().toString());
+        todoItemMap.put("startDate",dateUtils.convertDateToString(todoItem.getStartDate()));
+        todoItemMap.put("endDate",dateUtils.convertDateToString(todoItem.getEndDate()));
+        todoItemMap.put("isFavorite",String.valueOf(todoItem.isFavorite()));
+        return todoItemMap;
+    }
+    public int getItemByTitle(String title,ArrayList<TodoItem> items){
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getTitle().equalsIgnoreCase(title)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }

@@ -7,26 +7,26 @@ import server.user.UserService;
 
 import java.util.Map;
 
-@Path("users")
+@Path("/{name}")
 public class UserUpdateController {
     UserService userService = new UserService(new UserRepository());
 
+
     /**
-     * Accepts JSON object of the form {"newName":"newName"}
+     * Accepts a string of the new name
      */
     @PUT
-    @Path("/{name}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateUsersName(@PathParam("name") String name, Map<String,String> updateParams) {
-        boolean updated = userService.updateUsersName(name,updateParams.get("newName"));
+    public Response updateUsersName(@PathParam("name") String name, String newName) {
+        boolean updated = userService.updateUsersName(name,newName.trim());
         if(updated) {
             return new Response("YOUR NAME WAS UPDATED SUCCESSFULLY "+
-                    updateParams.get("newName").toUpperCase(),200,null);
+                    newName.trim().toUpperCase(), 200);
         }
         else{
-            return new Response("COULD NOT UPDATE NAME"+
-                    updateParams.get("newName").toUpperCase(),400,null);
+            return new Response("COULD NOT UPDATE NAME",400);
         }
     }
+
 
 }

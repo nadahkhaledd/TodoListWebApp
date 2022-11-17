@@ -3,6 +3,7 @@ package server.todoItems;
 import enums.Category;
 import enums.Priority;
 import ui.Font;
+import utility.DateUtils;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -28,7 +29,6 @@ public class TodoItem implements Serializable,Cloneable {
         this.startDate = startDate;
         this.endDate = endDate;
     }
-
     public String getTitle() {
         return title;
     }
