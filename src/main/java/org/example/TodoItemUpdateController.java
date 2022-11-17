@@ -16,11 +16,7 @@ public class TodoItemUpdateController {
     TodoItemsService todoListService = new TodoItemsService(new TodoItemsRepository());
 
 
-
-    /**
-     * Accepts JSON object of the attributes of TodoItem to be changed{"tite":"title"....}
-     */
-    @PUT
+    /*@PUT
     @Path("/{title}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -34,6 +30,23 @@ public class TodoItemUpdateController {
         TodoItem todoItem = new TodoItem(todoItemMap.get("title"),todoItemMap.get("description"),
                 priority,category,startDate,endDate);
         todoItem.setFavorite(Boolean.parseBoolean(todoItemMap.get("isFavorite")));
+        boolean updated = todoListService.updateTodoItem(name,todoItem,oldTitle);
+        if(updated) {
+            return new Response("ITEM WAS UPDATED SUCCESSFULLY",200);
+        }
+        else{
+            return new Response("COULD NOT UPDATE ITEM",400);
+        }
+    }*/
+    /**
+     * Accepts a todo Item
+     */
+    @PUT
+    @Path("/{title}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateTodoItem(@PathParam("name") String name,@PathParam("title") String oldTitle,
+                                   TodoItem todoItem) {
         boolean updated = todoListService.updateTodoItem(name,todoItem,oldTitle);
         if(updated) {
             return new Response("ITEM WAS UPDATED SUCCESSFULLY",200);
@@ -68,7 +81,6 @@ public class TodoItemUpdateController {
         }
         else{
             return new Response("COULD NOT ADD ITEM TO CATEGORY",400);
-
         }
     }
 }
