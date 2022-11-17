@@ -331,7 +331,7 @@ public class Simulator {
     private void takeUpdateItemFromUser() {
         String oldTitle = getOldTitleFromUser();
         if (oldTitle.equalsIgnoreCase("/back")) return;
-        int itemIndex = itemsService.getItemByTitle(oldTitle, currentUser.getItems());
+        int itemIndex = utils.getItemByTitle(oldTitle, currentUser.getItems());
         TodoItem item = currentUser.getItems().get(itemIndex).clone();
 
         System.out.println("Enter new data...");
@@ -499,7 +499,7 @@ public class Simulator {
         boolean updated = TodoItemUpdateClient.getInstance()
                         .addItemToCategory(currentUser.getName(),title,category );
         if(updated){
-            int itemIndex = itemsService.getItemByTitle(title,currentUser.getItems());
+            int itemIndex = utils.getItemByTitle(title,currentUser.getItems());
             currentUser.getItems().get(itemIndex).setCategory(category);
             System.out.println("ADDED TO CATEGORY SUCCESSFULLY");
         }
@@ -513,7 +513,7 @@ public class Simulator {
         boolean updated = TodoItemUpdateClient.getInstance()
                 .addItemToFavorites(currentUser.getName(), title);
         if(updated){
-            int itemIndex = itemsService.getItemByTitle(title, currentUser.getItems());
+            int itemIndex = utils.getItemByTitle(title, currentUser.getItems());
             currentUser.getItems().get(itemIndex).setFavorite(true);
             System.out.println("ADDED TO FAVORITES SUCCESSFULLY");
         }

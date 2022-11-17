@@ -3,6 +3,7 @@ package utility;
 import server.todoItems.TodoItem;
 import ui.Font;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -60,5 +61,13 @@ public class Utils {
         todoItemMap.put("endDate",dateUtils.convertDateToString(todoItem.getEndDate()));
         todoItemMap.put("isFavorite",String.valueOf(todoItem.isFavorite()));
         return todoItemMap;
+    }
+    public int getItemByTitle(String title,ArrayList<TodoItem> items){
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getTitle().equalsIgnoreCase(title)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
