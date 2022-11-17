@@ -45,19 +45,15 @@ public class UserRepository {
             return false;
         }
     }
-    public ArrayList<String> getUserNames() {
+    public ResultSet getUserNames() {
         ResultSet result = null;
-        ArrayList<String> usernames = new ArrayList<>();
         try {
             result = stmt.executeQuery(" SELECT name \n" +
                     "FROM todolist.user");
-
-            while (result.next())
-                usernames.add(result.getString(1));
         } catch (SQLException e) {
             System.out.println(e);
         }
 
-        return usernames;
+        return result;
     }
 }

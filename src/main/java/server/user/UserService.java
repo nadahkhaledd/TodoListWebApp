@@ -1,5 +1,9 @@
 package server.user;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 public class UserService {
     private final UserRepository userRepository;
 
@@ -18,5 +22,19 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    public ArrayList<String> getUserNames(){
+        ResultSet result = userRepository.getUserNames();
+
+        ArrayList<String> usernames = new ArrayList<>();
+
+        try {
+            while (result.next())
+                usernames.add(result.getString(1));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return usernames;
     }
 }
