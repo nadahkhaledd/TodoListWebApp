@@ -2,6 +2,7 @@ package server.storage;
 
 import server.model.User;
 import server.model.UserRepository;
+import server.model.UserService;
 import server.todoItems.TodoItemsRepository;
 import server.todoItems.TodoItemsService;
 import utility.DateUtils;
@@ -13,12 +14,15 @@ import java.util.ArrayList;
 public class DBStorage implements Storage{
     TodoItemsRepository repository;
     UserRepository userRepository;
+
+    UserService userService;
     TodoItemsService itemsService;
 
     public DBStorage(){
         repository = new TodoItemsRepository();
         itemsService = new TodoItemsService(repository);
         userRepository=new UserRepository();
+        userService = new UserService(userRepository);
     }
 
 
@@ -34,7 +38,7 @@ public class DBStorage implements Storage{
     @Override
     public ArrayList<User> loadData() {
         ArrayList<User> users = new ArrayList<>();
-        ArrayList<String> userNames = userRepository.getUserNames();
+        ArrayList<String> userNames = userService.getUserNames();
         for (String username : userNames) {
             User user = setUserData(username);
             users.add(user);
