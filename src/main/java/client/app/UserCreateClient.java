@@ -9,16 +9,15 @@ public class UserCreateClient {
 
     private final Client client = ClientConnection.client;
 
-    public boolean createUser(String name) {
-        int statusCode = client.target(ClientConnection.REST_URI)
+    public Response createUser(String name) {
+        Response response = client.target(ClientConnection.REST_URI)
                 .path("/user")
                 .path("/createUser")
                 .queryParam("name", name)
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity(new User(name), MediaType.APPLICATION_JSON))
-                .readEntity(Response.class)
-                .getStatusCode();
-        return statusCode == 201;
+                .readEntity(Response.class);
+        return response;
     }
 
 }

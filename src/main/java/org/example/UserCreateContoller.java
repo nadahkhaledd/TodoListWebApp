@@ -19,9 +19,9 @@ public class UserCreateContoller {
     public Response createUser(@QueryParam("name") String name) {
         boolean isCreated = userService.addUser(name);
         if(isCreated)
-            return new Response("Item created successfully.", 201, name);
+            return new Response("User created successfully.", 201, name);
         else
-            return new Response("Item couldn't be created.", 400, name);
+            return new Response("User couldn't be created.", 400, name);
     }
 
 

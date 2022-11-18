@@ -8,16 +8,15 @@ public class TodoItemDeleteClient {
 
     private final Client client = ClientConnection.client;
 
-    public boolean deleteTodoItem(String name, String title) {
-        int statusCode = client.target(ClientConnection.REST_URI)
+    public Response deleteTodoItem(String name, String title) {
+        Response response = client.target(ClientConnection.REST_URI)
                 .path("/todolist")
                 .path("/deleteItem")
                 .path(title)
                 .queryParam("name", name)
                 .request(MediaType.APPLICATION_JSON)
                 .delete()
-                .readEntity(Response.class)
-                .getStatusCode();
-        return statusCode == 200;
+                .readEntity(Response.class);
+        return response;
     }
 }

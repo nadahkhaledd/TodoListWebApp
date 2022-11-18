@@ -22,6 +22,9 @@ import java.util.Scanner;
 public class Simulator {
     private Scanner scanner;
     private TodoListClient todoListClient;
+    private TodoItemCreateClient todoItemCreateClient;
+    private TodoItemDeleteClient todoItemDeleteClient;
+    private UserCreateClient userCreateClient;
     private ArrayList<User> users;
     private User currentUser = null;
     private Utils utils;
@@ -34,6 +37,9 @@ public class Simulator {
     public Simulator(){
         scanner = new Scanner(System.in);
         todoListClient = new TodoListClient();
+        todoItemCreateClient = new TodoItemCreateClient();
+        todoItemDeleteClient = new TodoItemDeleteClient();
+        userCreateClient = new UserCreateClient();
         users = new ArrayList<>();
         utils = new Utils();
         dateUtils = new DateUtils();
@@ -113,10 +119,9 @@ public class Simulator {
                 System.err.println("The name Entered already exists, please enter a new name. (Press 0 to return to main page)");
             }
         }
-        User newUser = new User(usersName);
-        users.add(newUser);
-        userService.addUser(newUser.getName());
-        return newUser;
+        Response response = userCreateClient.createUser(usersName);
+        System.out.println(response.getMessage());
+        return new User((String)response.getItemsToBeReturned());
         //ask youssef if break functionality must be added here
 
     }
@@ -147,6 +152,15 @@ public class Simulator {
         currentUser = new User(name);
     }
 
+    public void addItem() {
+        TodoItem item = takeCreateItemFromUser();
+        if (item != null) {
+            Response isCreated = todoItemCreateClient.createTodoItem(currentUser.getName(), item);
+            System.out.println(isCreated.getMessage());
+            todoListClient.get(currentUser.getName(), "useritems").forEach(System.out::println);
+        }
+    }
+
     private void showMenu() {
 
         while (true) {
@@ -160,12 +174,7 @@ public class Simulator {
             int option = utils.getInput("Invalid input", 1, 13);
             switch (option) {
                 case 1:
-                    //TodoItem item = takeCreateItemFromUser();
-                    TodoItem item = new TodoItem();
-                    if (item != null) {
-                        // add item endpoint
-                        todoListClient.get(currentUser.getName(), "useritems").forEach(System.out::println);
-                    }
+                    addItem();
                     break;
 
                 case 2:
@@ -173,7 +182,7 @@ public class Simulator {
                     break;
 
                 case 3:
-                    //deleteItemByUser();
+                    deleteItemByUser();
                     //saveFile();
                     break;
 
@@ -418,19 +427,20 @@ public class Simulator {
         }
     }
 
-//    private void deleteItemByUser() {
-//        if (currentUser.getItems().isEmpty())
-//            utils.PrintColoredMessage(font.ANSI_RED, "No items available");
-//        else {
-//            utils.print("Enter title of item to be deleted:");
-//            String title = utils.getInput("invalid title");
-//            if (title.equalsIgnoreCase("/back")) return;
-//            itemsService.deleteTodoItem(title, currentUser.getItems());
-//            //  currentUser.deleteTodoItem(title);
-//
-//        }
-//    }
-//
+    private void deleteItemByUser() {
+        if (currentUser.getItems().isEmpty())
+            utils.PrintColoredMessage(font.ANSI_RED, "No items available");
+        else {
+            utils.print("Enter title of item to be deleted:");
+            String title = utils.getInput("invalid title");
+            if (title.equalsIgnoreCase("/back")) return;
+            Response isDeleted = todoItemDeleteClient.deleteTodoItem(currentUser.getName(), title);
+            System.out.println(isDeleted.getMessage());
+            //itemsService.deleteTodoItem(title, currentUser.getItems());
+            //  currentUser.deleteTodoItem(title);
+        }
+    }
+
 private void search() {
     boolean isSearchKeyValid = false;
     while (!isSearchKeyValid) {

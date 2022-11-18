@@ -9,16 +9,15 @@ public class TodoItemCreateClient {
 
     private final Client client = ClientConnection.client;
 
-    public boolean createTodoItem(String name, TodoItem todoItem) {
-        int statusCode = client.target(ClientConnection.REST_URI)
+    public Response createTodoItem(String name, TodoItem todoItem) {
+        Response statusCode = client.target(ClientConnection.REST_URI)
                 .path("/todolist")
                 .path("/createItem")
                 .queryParam("name", name)
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity(todoItem, MediaType.APPLICATION_JSON))
-                .readEntity(Response.class)
-                .getStatusCode();
-        return statusCode == 201;
+                .readEntity(Response.class);
+        return statusCode;
     }
 
 }
