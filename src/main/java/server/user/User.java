@@ -118,10 +118,10 @@ public class User implements Serializable {
         int foundItemIndex = itemsService.getItemByTitle(title, this.getItems());
         if (foundItemIndex != -1) {
             items.remove(foundItemIndex);
-            System.out.println("Item deleted successfully.");
+            //System.out.println("Item deleted successfully.");
             return true;
         }
-        System.out.println(font.ANSI_RED + "Item couldn't be deleted" + font.ANSI_RESET);
+        //System.out.println(font.ANSI_RED + "Item couldn't be deleted" + font.ANSI_RESET);
         return false;
     }
 

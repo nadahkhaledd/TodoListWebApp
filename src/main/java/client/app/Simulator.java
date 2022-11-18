@@ -121,7 +121,9 @@ public class Simulator {
         }
         Response response = userCreateClient.createUser(usersName);
         System.out.println(response.getMessage());
-        return new User((String)response.getItemsToBeReturned());
+        User newUser = new User((String) response.getItemsToBeReturned());
+        users.add(newUser);
+        return newUser;
         //ask youssef if break functionality must be added here
 
     }
@@ -155,8 +157,9 @@ public class Simulator {
     public void addItem() {
         TodoItem item = takeCreateItemFromUser();
         if (item != null) {
-            Response isCreated = todoItemCreateClient.createTodoItem(currentUser.getName(), item);
-            System.out.println(isCreated.getMessage());
+            Response created = todoItemCreateClient.createTodoItem(currentUser.getName(), item);
+            System.out.println(created.getMessage());
+            currentUser.addTodoItem(item);
             todoListClient.get(currentUser.getName(), "useritems").forEach(System.out::println);
         }
     }
@@ -436,6 +439,7 @@ public class Simulator {
             if (title.equalsIgnoreCase("/back")) return;
             Response isDeleted = todoItemDeleteClient.deleteTodoItem(currentUser.getName(), title);
             System.out.println(isDeleted.getMessage());
+            currentUser.deleteTodoItem(title);
             //itemsService.deleteTodoItem(title, currentUser.getItems());
             //  currentUser.deleteTodoItem(title);
         }
