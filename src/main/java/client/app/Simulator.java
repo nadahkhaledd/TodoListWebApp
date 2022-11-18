@@ -119,11 +119,14 @@ public class Simulator {
                 System.err.println("The name Entered already exists, please enter a new name. (Press 0 to return to main page)");
             }
         }
-        Response response = userCreateClient.createUser(usersName);
-        System.out.println(response.getMessage());
-        User newUser = new User((String) response.getItemsToBeReturned());
-        users.add(newUser);
-        return newUser;
+        Response userCreated = userCreateClient.createUser(usersName);
+        System.out.println(userCreated.getMessage());
+        if(userCreated.getStatusCode() == 201) {
+            User newUser = new User((String) userCreated.getItemsToBeReturned());
+            users.add(newUser);
+            return newUser;
+        }
+        return null;
         //ask youssef if break functionality must be added here
 
     }
@@ -157,10 +160,12 @@ public class Simulator {
     public void addItem() {
         TodoItem item = takeCreateItemFromUser();
         if (item != null) {
-            Response created = todoItemCreateClient.createTodoItem(currentUser.getName(), item);
-            System.out.println(created.getMessage());
-            currentUser.addTodoItem(item);
-            todoListClient.get(currentUser.getName(), "useritems").forEach(System.out::println);
+            Response createdItem = todoItemCreateClient.createTodoItem(currentUser.getName(), item);
+            System.out.println(createdItem.getMessage());
+            if(createdItem.getStatusCode() == 201) {
+                currentUser.addTodoItem(item);
+                todoListClient.get(currentUser.getName(), "useritems").forEach(System.out::println);
+            }
         }
     }
 
@@ -439,9 +444,11 @@ public class Simulator {
             if (title.equalsIgnoreCase("/back")) return;
             Response isDeleted = todoItemDeleteClient.deleteTodoItem(currentUser.getName(), title);
             System.out.println(isDeleted.getMessage());
-            currentUser.deleteTodoItem(title);
-            //itemsService.deleteTodoItem(title, currentUser.getItems());
-            //  currentUser.deleteTodoItem(title);
+            if(isDeleted.getStatusCode() == 200) {
+                int deletedItemIndex = utils.getItemByTitle(title, currentUser.getItems());
+                System.out.println(currentUser.getItems().get(deletedItemIndex).toString());
+                currentUser.deleteTodoItem(title);
+            }
         }
     }
 

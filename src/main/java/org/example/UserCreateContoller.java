@@ -2,6 +2,7 @@ package org.example;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import server.user.User;
 import server.user.UserRepository;
 import server.user.UserService;
 
@@ -19,9 +20,9 @@ public class UserCreateContoller {
     public Response createUser(@QueryParam("name") String name) {
         boolean isCreated = userService.addUser(name);
         if(isCreated)
-            return new Response("User created successfully.", 201, name);
+            return new Response("User "+name+" created successfully.", 201, name);
         else
-            return new Response("User couldn't be created.", 400, name);
+            return new Response("User "+name+" couldn't be created.", 400, name);
     }
 
 

@@ -17,9 +17,9 @@ public class TodoItemDeleteController {
     public Response deleteItem(@PathParam("title") String title, @QueryParam("name") String name) {
         boolean isDeleted = todoItemsService.deleteTodoItem(title, name);
         if(isDeleted)
-            return new Response("Item deleted successfully.", 200, title);
+            return new Response("Item "+title+" deleted successfully.", 200, title);
         else
-            return new Response("Item couldn't be deleted", 400, title);
+            return new Response("Item "+title +" couldn't be deleted", 400, title);
     }
 
 }
