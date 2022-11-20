@@ -1,9 +1,10 @@
-package org.example;
+package org.example.controller.todo;
 
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.QueryParam;
+import org.example.Response;
 import server.todoItems.TodoItemsRepository;
 import server.todoItems.TodoItemsService;
 

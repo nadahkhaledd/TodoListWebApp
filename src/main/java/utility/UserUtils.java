@@ -1,7 +1,7 @@
 package utility;
 
-import client.app.Clients.TodoListClient;
-import client.app.Clients.UserClient;
+import client.app.clients.TodoListClient;
+import client.app.clients.UserClient;
 import server.user.User;
 import server.todoItems.TodoItem;
 

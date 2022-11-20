@@ -1,10 +1,11 @@
-package org.example;
+package org.example.controller.user;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
+import org.example.Response;
 import server.user.User;
 import server.user.UserRepository;
 import server.user.UserService;

@@ -1,9 +1,10 @@
-package org.example;
+package org.example.controller.todo;
 
 import enums.SearchKey;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
+import org.example.Response;
 import server.todoItems.TodoItem;
 import server.todoItems.TodoItemsRepository;
 import server.todoItems.TodoItemsService;
@@ -19,7 +20,7 @@ public class SearchController {
     @GET
     @Path("Title")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response searchByTitle(@QueryParam("username") String username,@QueryParam("searchValue") String searchValue){
+    public Response searchByTitle(@QueryParam("username") String username, @QueryParam("searchValue") String searchValue){
        List<TodoItem> todoItems=todoItemsService.searchByKey(SearchKey.Title,searchValue,username);
        if (todoItems.isEmpty())
            return new Response("no items with this title",204,utils.convertItemsToJson((ArrayList<TodoItem>) todoItems));

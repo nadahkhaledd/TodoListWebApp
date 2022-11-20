@@ -1,7 +1,7 @@
 package client.app;
 
-import client.app.Clients.TodoListClient;
-import client.app.Clients.UserClient;
+import client.app.clients.TodoListClient;
+import client.app.clients.UserClient;
 import enums.Category;
 import enums.Priority;
 import server.user.UserService;
@@ -482,7 +482,6 @@ private void search() {
                     searchEndDate = scanner.next();
                     if (searchEndDate.equalsIgnoreCase("/back")) return;
                 } while (!dateUtils.isValidDate(searchEndDate));
-                // itemsService.searchShowItemsBySearchKey(SearchKey.EndDate, searchEndDate, currentUser.getItems());
                todoListClient.SearchByEndDate(currentUser.getName(),searchEndDate).forEach(System.out::println);
 
                 isSearchKeyValid = true;
@@ -494,7 +493,6 @@ private void search() {
                         + font.ANSI_RESET + "\n" + text.choosePriority, 1, 3);
                 if (searchPriority == -1) return;
                 String priorityValue = (searchPriority == 1) ? "Low" : ((searchPriority == 2) ? "Medium" : "High");
-                //itemsService.searchShowItemsBySearchKey(SearchKey.Priority, priorityValue, currentUser.getItems());
                 todoListClient.SearchByPriority(currentUser.getName(),priorityValue).forEach(System.out::println);
 
                 isSearchKeyValid = true;

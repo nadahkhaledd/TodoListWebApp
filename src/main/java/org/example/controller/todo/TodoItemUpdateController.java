@@ -1,8 +1,9 @@
-package org.example;
+package org.example.controller.todo;
 
 import enums.Category;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import org.example.Response;
 import server.todoItems.*;
 
 
@@ -41,7 +42,7 @@ public class TodoItemUpdateController {
     @Path("/{title}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateTodoItem(@PathParam("name") String name,@PathParam("title") String oldTitle,
+    public Response updateTodoItem(@PathParam("name") String name, @PathParam("title") String oldTitle,
                                    TodoItem todoItem) {
         boolean updated = todoListService.updateTodoItem(name,todoItem,oldTitle);
         if(updated) {
