@@ -26,8 +26,6 @@ public class TodoListClient {
        return todoListClient;
     }
 
-    //private static final String REST_URI
-      //      = "http://localhost:8080/TodoListWebApp/webapi";
     private final Client client = ClientBuilder.newClient();
 
     public ArrayList<TodoItem> get(String username, String endpoint){
