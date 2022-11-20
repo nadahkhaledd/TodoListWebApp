@@ -185,7 +185,6 @@ public class Simulator {
 
                 case 3:
                     deleteItemByUser();
-                    //saveFile();
                     break;
 
                 case 4:
@@ -307,6 +306,11 @@ public class Simulator {
             title = scanner.nextLine();
             titleAlreadyExists = (utils.getItemByTitle(title.trim(), currentUser.getItems()) != -1 && !oldTitle.equalsIgnoreCase(title.trim()));
         }
+
+        if(title.indexOf("'") > -1) {
+            title = title.replace("'", "\\\'");
+        }
+
         return title;
     }
 
@@ -436,12 +440,17 @@ public class Simulator {
             utils.print("Enter title of item to be deleted:");
             String title = utils.getInput("invalid title");
             if (title.equalsIgnoreCase("/back")) return;
-            Response isDeleted = todoListClient.deleteTodoItem(currentUser.getName(), title);
-            System.out.println(isDeleted.getMessage());
-            if(isDeleted.getStatusCode() == 200) {
-                int deletedItemIndex = utils.getItemByTitle(title, currentUser.getItems());
-                System.out.println(currentUser.getItems().get(deletedItemIndex).toString());
-                currentUser.deleteTodoItem(title);
+            if(utils.getItemByTitle(title, currentUser.getItems()) == -1) {
+                System.out.println(font.ANSI_RED + "Item could'nt be deleted.\n" +
+                        font.SET_BOLD_TEXT+font.ANSI_RED+"Title doesn't exist."+font.SET_PLAIN_TEXT+font.ANSI_RESET);
+            } else {
+                Response isDeleted = todoListClient.deleteTodoItem(currentUser.getName(), title);
+                System.out.println(isDeleted.getMessage());
+                if(isDeleted.getStatusCode() == 200) {
+                    int deletedItemIndex = utils.getItemByTitle(title, currentUser.getItems());
+                    System.out.println(currentUser.getItems().get(deletedItemIndex).toString());
+                    currentUser.deleteTodoItem(title);
+                }
             }
         }
     }
