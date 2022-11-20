@@ -9,7 +9,7 @@ import server.todoItems.*;
 @Path("/{name}/todolist")
 public class TodoItemUpdateController {
 
-    TodoItemsService todoListService = new TodoItemsService(new TodoItemsRepository());
+    TodoItemsService todoListService =TodoItemsService.getInstance();
 
 
     /*@PUT

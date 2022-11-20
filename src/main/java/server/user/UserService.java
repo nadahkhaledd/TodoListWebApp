@@ -6,9 +6,16 @@ import java.util.ArrayList;
 
 public class UserService {
     private final UserRepository userRepository;
+    private static UserService userService;
+    public static UserService getInstance(){
+        if(userService==null){
+            userService=new UserService();
+        }
+        return userService;
+    }
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    private UserService() {
+        this.userRepository = UserRepository.getInstance();
 
     }
 

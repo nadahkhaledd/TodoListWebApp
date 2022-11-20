@@ -10,8 +10,14 @@ import java.sql.Statement;
 public class UserRepository {
     Connection connection;
     Statement stmt;
-
-    public UserRepository() {
+    private static UserRepository userRepository;
+    public static UserRepository getInstance(){
+        if(userRepository==null){
+            userRepository=new UserRepository();
+        }
+        return userRepository;
+    }
+    private UserRepository() {
         connection = DBConnection.configureConnection();
         try {
             stmt = connection.createStatement();

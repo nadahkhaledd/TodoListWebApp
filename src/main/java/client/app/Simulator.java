@@ -1,14 +1,12 @@
 package client.app;
 
+import client.app.Clients.TodoListClient;
+import client.app.Clients.UserClient;
 import enums.Category;
 import enums.Priority;
-import enums.SearchKey;
-import server.user.UserRepository;
 import server.user.UserService;
 import server.user.User;
 import server.todoItems.TodoItem;
-import server.todoItems.TodoItemsRepository;
-import server.todoItems.TodoItemsService;
 import ui.Font;
 import ui.Text;
 import utility.DateUtils;
@@ -22,9 +20,7 @@ import java.util.Scanner;
 public class Simulator {
     private Scanner scanner;
     private TodoListClient todoListClient;
-    private TodoItemCreateClient todoItemCreateClient;
-    private TodoItemDeleteClient todoItemDeleteClient;
-    private UserCreateClient userCreateClient;
+    private UserClient userClient;
     private ArrayList<User> users;
     private User currentUser = null;
     private Utils utils;
@@ -36,17 +32,15 @@ public class Simulator {
 
     public Simulator(){
         scanner = new Scanner(System.in);
-        todoListClient = new TodoListClient();
-        todoItemCreateClient = new TodoItemCreateClient();
-        todoItemDeleteClient = new TodoItemDeleteClient();
-        userCreateClient = new UserCreateClient();
+        todoListClient = TodoListClient.getInstance();
         users = new ArrayList<>();
         utils = new Utils();
         dateUtils = new DateUtils();
         userUtils = new UserUtils();
         font = new Font();
         text = new Text();
-        userService= new UserService(new UserRepository());
+        userService= UserService.getInstance();
+        userClient=UserClient.getInstance();
     }
 
     public void start() {
@@ -119,7 +113,7 @@ public class Simulator {
                 System.err.println("The name Entered already exists, please enter a new name. (Press 0 to return to main page)");
             }
         }
-        Response userCreated = userCreateClient.createUser(usersName);
+        Response userCreated = userClient.createUser(usersName);
         System.out.println(userCreated.getMessage());
         if(userCreated.getStatusCode() == 201) {
             User newUser = new User((String) userCreated.getItemsToBeReturned());
@@ -160,7 +154,7 @@ public class Simulator {
     public void addItem() {
         TodoItem item = takeCreateItemFromUser();
         if (item != null) {
-            Response createdItem = todoItemCreateClient.createTodoItem(currentUser.getName(), item);
+            Response createdItem = todoListClient.createTodoItem(currentUser.getName(), item);
             System.out.println(createdItem.getMessage());
             if(createdItem.getStatusCode() == 201) {
                 currentUser.addTodoItem(item);
@@ -203,7 +197,7 @@ public class Simulator {
                     break;
 
                 case 6:
-                    //search();
+                    search();
                     break;
 
                 case 7:
@@ -427,7 +421,7 @@ public class Simulator {
         } else if (confirmUpdate == -1) return;
 
         //boolean updated = itemsService.updateTodoItem(currentUser.getName(), item, oldTitle);
-        boolean updated = TodoItemUpdateClient.getInstance()
+        boolean updated = TodoListClient.getInstance()
                 .updateTodoItem(currentUser.getName(), item,oldTitle);
         if (updated) {
             currentUser.getItems().get(itemIndex).updateNewItem(item);
@@ -442,7 +436,7 @@ public class Simulator {
             utils.print("Enter title of item to be deleted:");
             String title = utils.getInput("invalid title");
             if (title.equalsIgnoreCase("/back")) return;
-            Response isDeleted = todoItemDeleteClient.deleteTodoItem(currentUser.getName(), title);
+            Response isDeleted = todoListClient.deleteTodoItem(currentUser.getName(), title);
             System.out.println(isDeleted.getMessage());
             if(isDeleted.getStatusCode() == 200) {
                 int deletedItemIndex = utils.getItemByTitle(title, currentUser.getItems());
@@ -523,7 +517,7 @@ private void search() {
         Category category = text.categories.get(userCategoryChoice-1);
         //currentUser.addItemToCategory(title,category);
         //itemsService.addItemToCategory(currentUser.getName(),title,category);
-        boolean updated = TodoItemUpdateClient.getInstance()
+        boolean updated = TodoListClient.getInstance()
                         .addItemToCategory(currentUser.getName(),title,category );
         if(updated){
             int itemIndex = utils.getItemByTitle(title,currentUser.getItems());
@@ -537,7 +531,7 @@ private void search() {
         if(title.equalsIgnoreCase("/back")) return;
         currentUser.addItemToFavorite(title);
         //itemsService.addItemToFavorite(currentUser.getName(),title);
-        boolean updated = TodoItemUpdateClient.getInstance()
+        boolean updated = TodoListClient.getInstance()
                 .addItemToFavorites(currentUser.getName(), title);
         if(updated){
             int itemIndex = utils.getItemByTitle(title, currentUser.getItems());
@@ -561,7 +555,7 @@ private void search() {
                 System.err.println("The name entered already exists, please try again");
             }
         }
-        boolean updated = UserUpdateClient.getInstance()
+        boolean updated = userClient.getInstance()
                         .updateUsersName(currentUser.getName(),name);
         if(updated)
             currentUser.setName(name);

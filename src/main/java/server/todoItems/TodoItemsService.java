@@ -19,9 +19,15 @@ public class TodoItemsService {
     private final TodoItemsRepository repository;
     private Font font;
 
-
-    public TodoItemsService(TodoItemsRepository todoItemsRepository) {
-        this.repository = todoItemsRepository;
+    private static TodoItemsService todoService;
+    public static TodoItemsService getInstance(){
+        if (todoService==null){
+            todoService=new TodoItemsService();
+        }
+        return todoService;
+    }
+    private TodoItemsService() {
+        this.repository = TodoItemsRepository.getInstance();
         this.font = new Font();
 
     }

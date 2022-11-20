@@ -13,8 +13,15 @@ import java.util.ArrayList;
 public class TodoItemsRepository {
     Connection connection;
     Statement stmt;
+    private static TodoItemsRepository todoRepository;
+    public static TodoItemsRepository getInstance(){
+        if (todoRepository==null){
+            todoRepository=new TodoItemsRepository();
+        }
+        return todoRepository;
+    }
 
-    public TodoItemsRepository() {
+    private TodoItemsRepository() {
         connection = DBConnection.configureConnection();
         try {
             stmt = connection.createStatement();
@@ -205,6 +212,7 @@ public class TodoItemsRepository {
             int result = stmt.executeUpdate(updateStatement);
             return result > 0;
         } catch (SQLException e) {
+
             e.printStackTrace();
             return false;
         }

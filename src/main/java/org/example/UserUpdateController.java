@@ -7,7 +7,7 @@ import server.user.UserService;
 
 @Path("/{name}")
 public class UserUpdateController {
-    UserService userService = new UserService(new UserRepository());
+    UserService userService = UserService.getInstance();
 
 
     /**

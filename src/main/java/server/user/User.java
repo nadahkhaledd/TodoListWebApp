@@ -21,8 +21,8 @@ public class User implements Serializable {
         this.name = name;
         this.font = new Font();
         this.items = new ArrayList<>();
-        repository = new TodoItemsRepository();
-        itemsService = new TodoItemsService(this.repository);
+        repository = TodoItemsRepository.getInstance();
+        itemsService = TodoItemsService.getInstance();
     }
 
     public ArrayList<TodoItem> getItems() {

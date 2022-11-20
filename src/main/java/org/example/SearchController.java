@@ -15,7 +15,7 @@ import java.util.List;
 @Path("searchBy")
 public class SearchController {
    private Utils utils=new Utils();
-    private TodoItemsService todoItemsService=new TodoItemsService(new TodoItemsRepository());
+    private TodoItemsService todoItemsService=TodoItemsService.getInstance();
     @GET
     @Path("Title")
     @Produces({MediaType.APPLICATION_JSON})

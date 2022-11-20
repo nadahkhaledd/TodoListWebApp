@@ -1,7 +1,7 @@
 package utility;
 
-import client.app.TodoListClient;
-import client.app.UserClient;
+import client.app.Clients.TodoListClient;
+import client.app.Clients.UserClient;
 import server.user.User;
 import server.todoItems.TodoItem;
 
@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public class UserUtils {
 
-    TodoListClient todoListClient = new TodoListClient();
-    UserClient userClient = new UserClient();
+    TodoListClient todoListClient = TodoListClient.getInstance();
+    UserClient userClient = UserClient.getInstance();
 
     private User setUserData(String username, ArrayList<TodoItem> items) {
         User user = new User(username);

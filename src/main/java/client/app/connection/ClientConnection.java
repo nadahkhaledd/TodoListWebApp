@@ -1,4 +1,4 @@
-package client.app;
+package client.app.connection;
 
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;

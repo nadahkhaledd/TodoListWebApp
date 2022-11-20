@@ -10,7 +10,7 @@ import server.todoItems.TodoItemsService;
 @Path("/todolist")
 public class TodoItemCreateController {
 
-    TodoItemsService todoItemsService = new TodoItemsService(new TodoItemsRepository());
+    TodoItemsService todoItemsService = TodoItemsService.getInstance();
 
     @POST
     @Path("/createItem")

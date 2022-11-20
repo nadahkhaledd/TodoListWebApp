@@ -5,6 +5,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
+import server.user.User;
 import server.user.UserRepository;
 import server.user.UserService;
 import server.todoItems.TodoItem;
@@ -17,10 +18,10 @@ import java.util.ArrayList;
 @Path("get")
 public class userOperationsController {
 
-    TodoItemsRepository repository = new TodoItemsRepository();
-    TodoItemsService todoItemsService=new TodoItemsService(repository);
+    TodoItemsRepository repository = TodoItemsRepository.getInstance();
+    TodoItemsService todoItemsService=TodoItemsService.getInstance();
 
-    UserService userService = new UserService(new UserRepository());
+    UserService userService = UserService.getInstance();
     Utils utils = new Utils();
 
     @GET

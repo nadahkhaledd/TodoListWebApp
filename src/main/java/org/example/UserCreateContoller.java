@@ -11,7 +11,7 @@ import java.util.Map;
 @Path("/user")
 public class UserCreateContoller {
 
-    UserService userService = new UserService(new UserRepository());
+    UserService userService = UserService.getInstance();
 
     @POST
     @Path("/createUser")

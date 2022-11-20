@@ -10,7 +10,7 @@ import server.todoItems.TodoItemsService;
 @Path("/todolist")
 public class TodoItemDeleteController {
 
-    TodoItemsService todoItemsService = new TodoItemsService(new TodoItemsRepository());
+    TodoItemsService todoItemsService = TodoItemsService.getInstance();
 
     @DELETE
     @Path("/deleteItem/{title}")
