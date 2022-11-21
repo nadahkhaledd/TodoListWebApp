@@ -1,19 +1,16 @@
 package client.app;
 
+import client.app.clients.TodoListClient;
+import client.app.clients.UserClient;
 import enums.Category;
 import enums.Priority;
-import enums.SearchKey;
-import server.model.User;
-import server.model.UserRepository;
-import server.model.UserService;
-import server.storage.DBStorage;
-import server.storage.Storage;
+import server.user.UserService;
+import server.user.User;
 import server.todoItems.TodoItem;
-import server.todoItems.TodoItemsRepository;
-import server.todoItems.TodoItemsService;
 import ui.Font;
 import ui.Text;
 import utility.DateUtils;
+import utility.UserUtils;
 import utility.Utils;
 
 import java.util.ArrayList;
@@ -21,24 +18,29 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class Simulator {
-    private Scanner scanner = new Scanner(System.in);
-
-    TodoItemsRepository repository;
-    TodoItemsService itemsService;
-
-    private ArrayList<User> users = new ArrayList<>();
+    private Scanner scanner;
+    private TodoListClient todoListClient;
+    private UserClient userClient;
+    private ArrayList<User> users;
     private User currentUser = null;
-    private Storage storage;
-    private Utils utils = new Utils();
-    private DateUtils dateUtils = new DateUtils();
-    private Font font = new Font();
-    private Text text = new Text();
-    private UserService userService= new UserService(new UserRepository());
+    private Utils utils;
+    private DateUtils dateUtils;
+    private UserUtils userUtils;
+    private Font font;
+    private Text text;
+    private UserService userService;
 
     public Simulator(){
-        storage = new DBStorage();
-        repository = new TodoItemsRepository();
-        itemsService = new TodoItemsService(this.repository);
+        scanner = new Scanner(System.in);
+        todoListClient = TodoListClient.getInstance();
+        users = new ArrayList<>();
+        utils = new Utils();
+        dateUtils = new DateUtils();
+        userUtils = new UserUtils();
+        font = new Font();
+        text = new Text();
+        userService= UserService.getInstance();
+        userClient=UserClient.getInstance();
     }
 
     public void start() {
@@ -111,10 +113,14 @@ public class Simulator {
                 System.err.println("The name Entered already exists, please enter a new name. (Press 0 to return to main page)");
             }
         }
-        User newUser = new User(usersName);
-        users.add(newUser);
-        userService.addUser(newUser.getName());
-        return newUser;
+        Response userCreated = userClient.createUser(usersName);
+        System.out.println(userCreated.getMessage());
+        if(userCreated.getStatusCode() == 201) {
+            User newUser = new User((String) userCreated.getItemsToBeReturned());
+            users.add(newUser);
+            return newUser;
+        }
+        return null;
         //ask youssef if break functionality must be added here
 
     }
@@ -129,7 +135,7 @@ public class Simulator {
     }
 
     private boolean isThereUser() {
-        ArrayList<User> data = storage.loadData();
+        ArrayList<User> data = userUtils.loadData();
         if (data.isEmpty())
             return false;
         else {
@@ -145,6 +151,18 @@ public class Simulator {
         currentUser = new User(name);
     }
 
+    public void addItem() {
+        TodoItem item = takeCreateItemFromUser();
+        if (item != null) {
+            Response createdItem = todoListClient.createTodoItem(currentUser.getName(), item);
+            System.out.println(createdItem.getMessage());
+            if(createdItem.getStatusCode() == 201) {
+                currentUser.addTodoItem(item);
+                todoListClient.get(currentUser.getName(), "useritems").forEach(System.out::println);
+            }
+        }
+    }
+
     private void showMenu() {
 
         while (true) {
@@ -158,31 +176,23 @@ public class Simulator {
             int option = utils.getInput("Invalid input", 1, 13);
             switch (option) {
                 case 1:
-                    TodoItem item = takeCreateItemFromUser();
-                    if (item != null) {
-                        currentUser.addTodoItem(item);
-                        itemsService.showAllTodoItems(currentUser.getItems());
-                        itemsService.addTodoItem(currentUser.getName(), item);
-                        saveFile();
-                    }
+                    addItem();
                     break;
 
                 case 2:
                     takeUpdateItemFromUser();
-                    saveFile();
                     break;
 
                 case 3:
                     deleteItemByUser();
-                    saveFile();
                     break;
 
                 case 4:
-                    itemsService.showAllTodoItems(currentUser.getItems());
+                    todoListClient.get(currentUser.getName(), "useritems").forEach(System.out::println);
                     break;
 
                 case 5:
-                    currentUser.showTop5ItemsByDate();
+                    todoListClient.get(currentUser.getName(), "userlatest").forEach(System.out::println);
                     break;
 
                 case 6:
@@ -191,16 +201,16 @@ public class Simulator {
 
                 case 7:
                     addItemToCategoryFromUser();
-                    saveFile();
+
                     break;
 
                 case 8:
                     addItemToFavoriteFromUser();
-                    saveFile();
+
                     break;
 
                 case 9:
-                    itemsService.printFavorites(currentUser.getItems());
+                    todoListClient.get(currentUser.getName(), "userfavorites").forEach(System.out::println);
                     break;
 
                 case 10:
@@ -213,7 +223,6 @@ public class Simulator {
                     currentUser = null;
                     break;
                 case 13:
-                    saveFile();
                     System.exit(0);
                     break;
             }
@@ -287,7 +296,7 @@ public class Simulator {
     private String validateGetTitle(String oldTitle) {// used to make sure that user input(string) is not empty or not only just ' ' character
         String title = scanner.nextLine();
         if (title.equalsIgnoreCase("/back")) return title;
-        boolean titleAlreadyExists = (itemsService.getItemByTitle(title.trim(), currentUser.getItems()) != -1 && !oldTitle.equalsIgnoreCase(title.trim()));
+        boolean titleAlreadyExists = (utils.getItemByTitle(title.trim(), currentUser.getItems()) != -1 && !oldTitle.equalsIgnoreCase(title.trim()));
 
         while (title.matches(" +") || title.isEmpty() || titleAlreadyExists) {// used to make sure that user input(string) is not empty or not only just ' ' character and title doesn't exist
             if (titleAlreadyExists)
@@ -295,8 +304,13 @@ public class Simulator {
             else if (title.matches(" +") || title.isEmpty())
                 utils.print("invalid title");
             title = scanner.nextLine();
-            titleAlreadyExists = (itemsService.getItemByTitle(title.trim(), currentUser.getItems()) != -1 && !oldTitle.equalsIgnoreCase(title.trim()));
+            titleAlreadyExists = (utils.getItemByTitle(title.trim(), currentUser.getItems()) != -1 && !oldTitle.equalsIgnoreCase(title.trim()));
         }
+
+        if(title.indexOf("'") > -1) {
+            title = title.replace("'", "\\\'");
+        }
+
         return title;
     }
 
@@ -331,7 +345,7 @@ public class Simulator {
     private void takeUpdateItemFromUser() {
         String oldTitle = getOldTitleFromUser();
         if (oldTitle.equalsIgnoreCase("/back")) return;
-        int itemIndex = itemsService.getItemByTitle(oldTitle, currentUser.getItems());
+        int itemIndex = utils.getItemByTitle(oldTitle, currentUser.getItems());
         TodoItem item = currentUser.getItems().get(itemIndex).clone();
 
         System.out.println("Enter new data...");
@@ -410,7 +424,9 @@ public class Simulator {
 
         } else if (confirmUpdate == -1) return;
 
-        boolean updated = itemsService.updateTodoItem(currentUser.getName(), item, oldTitle, currentUser.getItems());
+        //boolean updated = itemsService.updateTodoItem(currentUser.getName(), item, oldTitle);
+        boolean updated = TodoListClient.getInstance()
+                .updateTodoItem(currentUser.getName(), item,oldTitle);
         if (updated) {
             currentUser.getItems().get(itemIndex).updateNewItem(item);
             System.out.println("Item updated:\n" + item.toString());
@@ -424,60 +440,74 @@ public class Simulator {
             utils.print("Enter title of item to be deleted:");
             String title = utils.getInput("invalid title");
             if (title.equalsIgnoreCase("/back")) return;
-            itemsService.deleteTodoItem(title, currentUser.getItems());
-            //  currentUser.deleteTodoItem(title);
-
+            if(utils.getItemByTitle(title, currentUser.getItems()) == -1) {
+                System.out.println(font.ANSI_RED + "Item could'nt be deleted.\n" +
+                        font.SET_BOLD_TEXT+font.ANSI_RED+"Title doesn't exist."+font.SET_PLAIN_TEXT+font.ANSI_RESET);
+            } else {
+                Response isDeleted = todoListClient.deleteTodoItem(currentUser.getName(), title);
+                System.out.println(isDeleted.getMessage());
+                if(isDeleted.getStatusCode() == 200) {
+                    int deletedItemIndex = utils.getItemByTitle(title, currentUser.getItems());
+                    System.out.println(currentUser.getItems().get(deletedItemIndex).toString());
+                    currentUser.deleteTodoItem(title);
+                }
+            }
         }
     }
 
-    private void search() {
-        boolean isSearchKeyValid = false;
-        while (!isSearchKeyValid) {
-            utils.print(text.chooseSearchFilter);
-            String searchOption = scanner.nextLine();
+private void search() {
+    boolean isSearchKeyValid = false;
+    while (!isSearchKeyValid) {
+        utils.print(text.chooseSearchFilter);
+        String searchOption = scanner.nextLine();
 
-            switch (searchOption) {
-                case "1":
-                    utils.print("Enter title of an item: ");
-                    String searchTitle = utils.getInput("invalid title");
-                    if (searchTitle.equalsIgnoreCase("/back")) return;
-                    itemsService.searchShowItemsBySearchKey(SearchKey.Title, searchTitle, currentUser.getItems());
-                    isSearchKeyValid = true;
-                    break;
+        switch (searchOption) {
+            case "1":
+                utils.print("Enter title of an item: ");
+                String searchTitle = utils.getInput("invalid title");
+                if (searchTitle.equalsIgnoreCase("/back")) return;
 
-                case "2":
-                    String searchStartDate;
-                    do {
-                        utils.print(text.enterStartDate);
-                        searchStartDate = scanner.next();
-                        if (searchStartDate.equalsIgnoreCase("/back")) return;
-                    } while (!dateUtils.isValidDate(searchStartDate));
-                    itemsService.searchShowItemsBySearchKey(SearchKey.StartDate, searchStartDate, currentUser.getItems());
-                    isSearchKeyValid = true;
-                    break;
+                todoListClient.SearchByTitle(currentUser.getName(),searchTitle).forEach(System.out::println);
+                // itemsService.searchShowItemsBySearchKey(SearchKey.Title, searchTitle, currentUser.getItems());
+                isSearchKeyValid = true;
+                break;
 
-                case "3":
-                    String searchEndDate;
-                    do {
-                        utils.print(text.enterEndDate);
-                        searchEndDate = scanner.next();
-                        if (searchEndDate.equalsIgnoreCase("/back")) return;
-                    } while (!dateUtils.isValidDate(searchEndDate));
-                    itemsService.searchShowItemsBySearchKey(SearchKey.EndDate, searchEndDate, currentUser.getItems());
-                    isSearchKeyValid = true;
-                    break;
+            case "2":
+                String searchStartDate;
+                do {
+                    utils.print(text.enterStartDate);
+                    searchStartDate = scanner.next();
+                    if (searchStartDate.equalsIgnoreCase("/back")) return;
+                } while (!dateUtils.isValidDate(searchStartDate));
+                // itemsService.searchShowItemsBySearchKey(SearchKey.StartDate, searchStartDate, currentUser.getItems());
+                todoListClient.SearchByStartDate(currentUser.getName(),searchStartDate).forEach(System.out::println);
+                isSearchKeyValid = true;
+                break;
 
-                case "4":
-                    utils.print(text.choosePriority);
-                    int searchPriority = utils.getInput("Invalid option, try again."
-                            + font.ANSI_RESET + "\n" + text.choosePriority, 1, 3);
-                    if (searchPriority == -1) return;
-                    String priorityValue = (searchPriority == 1) ? "Low" : ((searchPriority == 2) ? "Medium" : "High");
-                    itemsService.searchShowItemsBySearchKey(SearchKey.Priority, priorityValue, currentUser.getItems());
-                    isSearchKeyValid = true;
-                    break;
-                case "/back":
-                    return;
+            case "3":
+                String searchEndDate;
+                do {
+                    utils.print(text.enterEndDate);
+                    searchEndDate = scanner.next();
+                    if (searchEndDate.equalsIgnoreCase("/back")) return;
+                } while (!dateUtils.isValidDate(searchEndDate));
+               todoListClient.SearchByEndDate(currentUser.getName(),searchEndDate).forEach(System.out::println);
+
+                isSearchKeyValid = true;
+                break;
+
+            case "4":
+                utils.print(text.choosePriority);
+                int searchPriority = utils.getInput("Invalid option, try again."
+                        + font.ANSI_RESET + "\n" + text.choosePriority, 1, 3);
+                if (searchPriority == -1) return;
+                String priorityValue = (searchPriority == 1) ? "Low" : ((searchPriority == 2) ? "Medium" : "High");
+                todoListClient.SearchByPriority(currentUser.getName(),priorityValue).forEach(System.out::println);
+
+                isSearchKeyValid = true;
+                break;
+            case "/back":
+                return;
 
                 default:
                     System.err.println("Invalid input.");
@@ -493,14 +523,28 @@ public class Simulator {
                 text.chooseCategory, 1, 6);
         Category category = text.categories.get(userCategoryChoice-1);
         //currentUser.addItemToCategory(title,category);
-        itemsService.addItemToCategory(currentUser.getName(),title,category,currentUser.getItems());
+        //itemsService.addItemToCategory(currentUser.getName(),title,category);
+        boolean updated = TodoListClient.getInstance()
+                        .addItemToCategory(currentUser.getName(),title,category );
+        if(updated){
+            int itemIndex = utils.getItemByTitle(title,currentUser.getItems());
+            currentUser.getItems().get(itemIndex).setCategory(category);
+            System.out.println("ADDED TO CATEGORY SUCCESSFULLY");
+        }
     }
 
     private void addItemToFavoriteFromUser() {
         String title = getExistingTitle("Favorites");
         if(title.equalsIgnoreCase("/back")) return;
-        //currentUser.addItemToFavorite(title);
-        itemsService.addItemToFavorite(currentUser.getName(),title,currentUser.getItems());
+        currentUser.addItemToFavorite(title);
+        //itemsService.addItemToFavorite(currentUser.getName(),title);
+        boolean updated = TodoListClient.getInstance()
+                .addItemToFavorites(currentUser.getName(), title);
+        if(updated){
+            int itemIndex = utils.getItemByTitle(title, currentUser.getItems());
+            currentUser.getItems().get(itemIndex).setFavorite(true);
+            System.out.println("ADDED TO FAVORITES SUCCESSFULLY");
+        }
     }
 
     private void updateName() {
@@ -518,18 +562,15 @@ public class Simulator {
                 System.err.println("The name entered already exists, please try again");
             }
         }
-        String result = userService.updateUsersName(currentUser.getName(),name);
-        if(result!=null)
+        boolean updated = userClient.getInstance()
+                        .updateUsersName(currentUser.getName(),name);
+        if(updated)
             currentUser.setName(name);
 
     }
 
     private void clearScreen() {
         for (int i = 0; i < 50; ++i) System.out.println();
-    }
-
-    private void saveFile() {
-        storage.saveData(users);
     }
 
 }

@@ -1,4 +1,4 @@
-package server.model;
+package server.user;
 
 import enums.Category;
 import server.todoItems.TodoItem;
@@ -21,8 +21,8 @@ public class User implements Serializable {
         this.name = name;
         this.font = new Font();
         this.items = new ArrayList<>();
-        repository = new TodoItemsRepository();
-        itemsService = new TodoItemsService(this.repository);
+        repository = TodoItemsRepository.getInstance();
+        itemsService = TodoItemsService.getInstance();
     }
 
     public ArrayList<TodoItem> getItems() {
@@ -118,10 +118,10 @@ public class User implements Serializable {
         int foundItemIndex = itemsService.getItemByTitle(title, this.getItems());
         if (foundItemIndex != -1) {
             items.remove(foundItemIndex);
-            System.out.println("Item deleted successfully.");
+            //System.out.println("Item deleted successfully.");
             return true;
         }
-        System.out.println(font.ANSI_RED + "Item couldn't be deleted" + font.ANSI_RESET);
+        //System.out.println(font.ANSI_RED + "Item couldn't be deleted" + font.ANSI_RESET);
         return false;
     }
 

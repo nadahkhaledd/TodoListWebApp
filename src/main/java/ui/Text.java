@@ -16,8 +16,8 @@ public class Text {
 
     public String choosePriority = "Choose priority for the item (1.Low, 2.Medium, 3.High):";
     public String chooseCategory = "Choose category for the item (1.work, 2.chores, 3.People, 4.Learning, 5.Other, 6.No category)";
-    public String enterStartDate = "Enter start date of the item (e.g. dd-MM-yyyy)";
-    public String enterEndDate = "Enter end date of the item (e.g. dd-MM-yyyy)";
+    public String enterStartDate = "Enter start date of the item (e.g. yyyy-MM-dd)";
+    public String enterEndDate = "Enter end date of the item (e.g. yyyy-MM-dd)";
     public String chooseSearchFilter = "choose filter for search (1.title, 2.start date, 3.end date, 4.priority)";
 
 

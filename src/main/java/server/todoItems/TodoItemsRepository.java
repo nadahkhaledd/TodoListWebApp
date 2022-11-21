@@ -13,8 +13,15 @@ import java.util.ArrayList;
 public class TodoItemsRepository {
     Connection connection;
     Statement stmt;
+    private static TodoItemsRepository todoRepository;
+    public static TodoItemsRepository getInstance(){
+        if (todoRepository==null){
+            todoRepository=new TodoItemsRepository();
+        }
+        return todoRepository;
+    }
 
-    public TodoItemsRepository() {
+    private TodoItemsRepository() {
         connection = DBConnection.configureConnection();
         try {
             stmt = connection.createStatement();
@@ -44,22 +51,77 @@ public class TodoItemsRepository {
         }
     }
 
-    public ArrayList<String> getUserNames() {
+    public ResultSet searchByTitle(String username,String title) {
         ResultSet result = null;
-        ArrayList<String> usernames = new ArrayList<>();
         try {
-            result = stmt.executeQuery(" SELECT name \n" +
-                    "FROM todolist.user");
+            result = stmt.executeQuery("SELECT t.title, t.description, " +
+                    "t.priority, t.category, t.startDate, t.endDate, t.isFavorite \n" +
+                    "FROM todolist.user as u LEFT OUTER JOIN todolist.todoitem as t\n" +
+                    "ON t.userId = u.iduser \n " +
+                    "WHERE u.name = '" + username + "'"+" and t.title= '"+title+"'");
 
-            while (result.next())
-                usernames.add(result.getString(1));
         } catch (SQLException e) {
             System.out.println(e);
         }
+        return result;
+    }
+    public ResultSet searchByStartDate(String username,String startDate) {
+        ResultSet result = null;
+        try {
+            result = stmt.executeQuery("SELECT t.title, t.description, " +
+                    "t.priority, t.category, t.startDate, t.endDate, t.isFavorite \n" +
+                    "FROM todolist.user as u LEFT OUTER JOIN todolist.todoitem as t\n" +
+                    "ON t.userId = u.iduser \n " +
+                    "WHERE u.name = '" + username + "'"+" and t.startDate= '"+startDate+"'");
 
-        return usernames;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return result;
+    }
+    public ResultSet searchByEndDate(String username,String endDate) {
+        ResultSet result = null;
+        try {
+            result = stmt.executeQuery("SELECT t.title, t.description, " +
+                    "t.priority, t.category, t.startDate, t.endDate, t.isFavorite \n" +
+                    "FROM todolist.user as u LEFT OUTER JOIN todolist.todoitem as t\n" +
+                    "ON t.userId = u.iduser \n " +
+                    "WHERE u.name = '" + username + "'"+" and t.endDate= '"+endDate+"'");
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return result;
+    }
+    public ResultSet searchByPriority(String username,String priority) {
+        ResultSet result = null;
+        try {
+            result = stmt.executeQuery("SELECT t.title, t.description, " +
+                    "t.priority, t.category, t.startDate, t.endDate, t.isFavorite \n" +
+                    "FROM todolist.user as u LEFT OUTER JOIN todolist.todoitem as t\n" +
+                    "ON t.userId = u.iduser \n " +
+                    "WHERE u.name = '" + username + "'"+" and t.priority= '"+priority+"'");
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return result;
     }
 
+    public ResultSet getFavorites(String username) {
+        ResultSet result = null;
+        try {
+            result = stmt.executeQuery("SELECT t.title, t.description, " +
+                    "t.priority, t.category, t.startDate, t.endDate, t.isFavorite \n" +
+                    "FROM todolist.user as u JOIN todolist.todoitem as t\n" +
+                    "ON t.userId = u.iduser \n " +
+                    "WHERE u.name = '" + username + "'"+" and t.isFavorite= 1");
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return result;
+    }
     public ResultSet getUserTodos(String username) {
         ResultSet result = null;
         try {
@@ -92,13 +154,13 @@ public class TodoItemsRepository {
 
     }
 
-    public boolean deleteTodoItem(String title) {
-        System.out.println("title = " + title);
+    public boolean deleteTodoItem(String title, String name) {
+        String subQuery = "(SELECT iduser FROM todolist.user where name= '"+name+"')";
+        String sqlQuery = "DELETE FROM todolist.todoitem " +
+                "WHERE title = '" + title + "' AND userid = " + subQuery;
         try {
-            String sqlQuery = "DELETE FROM todolist.todoitem " +
-                    "WHERE title = '" + title + "'";
-            stmt.executeUpdate(sqlQuery);
-            return true;
+            int result = stmt.executeUpdate(sqlQuery);
+            return result > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -150,6 +212,7 @@ public class TodoItemsRepository {
             int result = stmt.executeUpdate(updateStatement);
             return result > 0;
         } catch (SQLException e) {
+
             e.printStackTrace();
             return false;
         }

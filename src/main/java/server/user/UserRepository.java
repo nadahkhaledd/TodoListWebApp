@@ -1,16 +1,23 @@
-package server.model;
+package server.user;
 
 import server.connection.DBConnection;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class UserRepository {
     Connection connection;
     Statement stmt;
-
-    public UserRepository() {
+    private static UserRepository userRepository;
+    public static UserRepository getInstance(){
+        if(userRepository==null){
+            userRepository=new UserRepository();
+        }
+        return userRepository;
+    }
+    private UserRepository() {
         connection = DBConnection.configureConnection();
         try {
             stmt = connection.createStatement();
@@ -42,5 +49,16 @@ public class UserRepository {
             e.printStackTrace();
             return false;
         }
+    }
+    public ResultSet getUserNames() {
+        ResultSet result = null;
+        try {
+            result = stmt.executeQuery(" SELECT name \n" +
+                    "FROM todolist.user");
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return result;
     }
 }

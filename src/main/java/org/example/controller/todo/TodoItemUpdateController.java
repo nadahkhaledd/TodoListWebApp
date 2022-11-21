@@ -1,0 +1,83 @@
+package org.example.controller.todo;
+
+import enums.Category;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import org.example.Response;
+import server.todoItems.*;
+
+
+@Path("/{name}/todolist")
+public class TodoItemUpdateController {
+
+    TodoItemsService todoListService =TodoItemsService.getInstance();
+
+
+    /*@PUT
+    @Path("/{title}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateTodoItem(@PathParam("name") String name,@PathParam("title") String oldTitle,
+                                    Map<String,String> todoItemMap) {
+        DateUtils dateUtils = new DateUtils();
+        Date startDate = dateUtils.convertStringToSQLDate(todoItemMap.get("startDate"));
+        Date endDate = dateUtils.convertStringToSQLDate(todoItemMap.get("endDate"));
+        Priority priority = Priority.valueOf(todoItemMap.get("priority"));
+        Category category = Category.valueOf(todoItemMap.get("category"));
+        TodoItem todoItem = new TodoItem(todoItemMap.get("title"),todoItemMap.get("description"),
+                priority,category,startDate,endDate);
+        todoItem.setFavorite(Boolean.parseBoolean(todoItemMap.get("isFavorite")));
+        boolean updated = todoListService.updateTodoItem(name,todoItem,oldTitle);
+        if(updated) {
+            return new Response("ITEM WAS UPDATED SUCCESSFULLY",200);
+        }
+        else{
+            return new Response("COULD NOT UPDATE ITEM",400);
+        }
+    }*/
+    /**
+     * Accepts a todo Item
+     */
+    @PUT
+    @Path("/{title}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateTodoItem(@PathParam("name") String name, @PathParam("title") String oldTitle,
+                                   TodoItem todoItem) {
+        boolean updated = todoListService.updateTodoItem(name,todoItem,oldTitle);
+        if(updated) {
+            return new Response("ITEM WAS UPDATED SUCCESSFULLY",200);
+        }
+        else{
+            return new Response("COULD NOT UPDATE ITEM",400);
+        }
+    }
+
+    @PUT
+    @Path("/{title}/fav")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addItemToFavorites(@PathParam("name") String name,@PathParam("title") String title) {
+        boolean updated = todoListService.addItemToFavorite(name,title);
+        if(updated) {
+            return new Response("ITEM WAS ADDED TO FAVORITES SUCCESSFULLY",200);
+        }
+        else{
+            return new Response("COULD NOT ADD ITEM TO FAVORITES",400);
+        }
+    }
+
+    @PUT
+    @Path("/{title}/category")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addItemToCategory(@PathParam("name") String name, @PathParam("title") String title,
+                                    Category category) {
+        boolean updated = todoListService.addItemToCategory(name,title,category);
+        if(updated) {
+            return new Response("ITEM WAS ADDED TO CATEGORY SUCCESSFULLY",200);
+        }
+        else{
+            return new Response("COULD NOT ADD ITEM TO CATEGORY",400);
+        }
+    }
+}
