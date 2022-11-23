@@ -1,9 +1,9 @@
-package org.example;
+package utility;
 
 public class Response {
-    String message;
-    int statusCode;
-    Object itemsToBeReturned;
+   private String message;
+  private  int statusCode;
+    private Object itemsToBeReturned;
 
     public Response(){}
 
