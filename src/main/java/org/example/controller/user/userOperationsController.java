@@ -5,11 +5,11 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
-import org.example.Response;
 import server.service.UserService;
 import server.model.TodoItem;
 import server.repository.TodoItemsRepository;
 import server.service.TodoItemsService;
+import utility.Response;
 import utility.Utils;
 
 import java.util.ArrayList;

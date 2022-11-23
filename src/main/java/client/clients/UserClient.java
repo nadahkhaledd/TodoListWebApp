@@ -4,9 +4,10 @@ import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.MediaType;
-import org.example.Response;
 import server.model.User;
 import client.connection.APIConnection;
+import utility.Response;
+
 import java.util.ArrayList;
 
 public class UserClient {
@@ -26,14 +27,14 @@ public class UserClient {
                 .request(MediaType.APPLICATION_JSON)
                 .get(Response.class).getItemsToBeReturned();
     }
-    public client.app.Response createUser(String name) {
-        client.app.Response response = client.target(APIConnection.REST_URI)
+    public utility.Response createUser(String name) {
+        utility.Response response = client.target(APIConnection.REST_URI)
                 .path("/user")
                 .path("/createUser")
                 .queryParam("name", name)
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity(new User(name), MediaType.APPLICATION_JSON))
-                .readEntity(client.app.Response.class);
+                .readEntity(utility.Response.class);
         return response;
     }
     public boolean updateUsersName(String oldName, String newName){

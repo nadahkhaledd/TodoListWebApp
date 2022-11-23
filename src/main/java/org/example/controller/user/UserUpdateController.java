@@ -2,8 +2,8 @@ package org.example.controller.user;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import org.example.Response;
 import server.service.UserService;
+import utility.Response;
 
 @Path("/{name}")
 public class UserUpdateController {

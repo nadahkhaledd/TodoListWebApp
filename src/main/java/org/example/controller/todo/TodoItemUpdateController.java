@@ -3,39 +3,15 @@ package org.example.controller.todo;
 import enums.Category;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import org.example.Response;
 import server.model.TodoItem;
 import server.service.TodoItemsService;
+import utility.Response;
 
 
 @Path("/{name}/todolist")
 public class TodoItemUpdateController {
 
     TodoItemsService todoListService =TodoItemsService.getInstance();
-
-
-    /*@PUT
-    @Path("/{title}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateTodoItem(@PathParam("name") String name,@PathParam("title") String oldTitle,
-                                    Map<String,String> todoItemMap) {
-        DateUtils dateUtils = new DateUtils();
-        Date startDate = dateUtils.convertStringToSQLDate(todoItemMap.get("startDate"));
-        Date endDate = dateUtils.convertStringToSQLDate(todoItemMap.get("endDate"));
-        Priority priority = Priority.valueOf(todoItemMap.get("priority"));
-        Category category = Category.valueOf(todoItemMap.get("category"));
-        TodoItem todoItem = new TodoItem(todoItemMap.get("title"),todoItemMap.get("description"),
-                priority,category,startDate,endDate);
-        todoItem.setFavorite(Boolean.parseBoolean(todoItemMap.get("isFavorite")));
-        boolean updated = todoListService.updateTodoItem(name,todoItem,oldTitle);
-        if(updated) {
-            return new Response("ITEM WAS UPDATED SUCCESSFULLY",200);
-        }
-        else{
-            return new Response("COULD NOT UPDATE ITEM",400);
-        }
-    }*/
     /**
      * Accepts a todo Item
      */

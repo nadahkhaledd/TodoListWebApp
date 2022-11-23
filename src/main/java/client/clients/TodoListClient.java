@@ -6,8 +6,8 @@ import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.MediaType;
-import org.example.Response;
 import server.model.TodoItem;
+import utility.Response;
 import utility.Utils;
 
 import java.util.ArrayList;
@@ -39,10 +39,10 @@ public class TodoListClient {
 
 
     public List<TodoItem> SearchByTitle(String username, String searchValue)  {
-        client.app.Response response = client
+        utility.Response response = client
                 .target(APIConnection.REST_URI+"/searchBy/Title?username="+username+"&searchValue="+searchValue)
                 .request(MediaType.APPLICATION_JSON)
-                .get().readEntity(client.app.Response.class);
+                .get().readEntity(utility.Response.class);
         List<TodoItem> result=utils.jsonToTodos(
                 (ArrayList<String>) response.getItemsToBeReturned());
         if (result==null||result.isEmpty())
@@ -50,10 +50,10 @@ public class TodoListClient {
         return result;
     }
     public List<TodoItem> SearchByPriority(String username, String searchValue)  {
-        client.app.Response response = client
+        utility.Response response = client
                 .target(APIConnection.REST_URI+"/searchBy/Priority?username="+username+"&searchValue="+searchValue)
                 .request(MediaType.APPLICATION_JSON)
-                .get().readEntity(client.app.Response.class);
+                .get().readEntity(utility.Response.class);
         List<TodoItem> result=utils.jsonToTodos(
                 (ArrayList<String>) response.getItemsToBeReturned());
         if (result==null||result.isEmpty())
@@ -61,10 +61,10 @@ public class TodoListClient {
         return result;
     }
     public List<TodoItem> SearchByStartDate(String username, String searchValue)  {
-        client.app.Response response = client
+        utility.Response response = client
                 .target(APIConnection.REST_URI+"/searchBy/StartDate?username="+username+"&searchValue="+searchValue)
                 .request(MediaType.APPLICATION_JSON)
-                .get().readEntity(client.app.Response.class);
+                .get().readEntity(utility.Response.class);
         List<TodoItem> result=utils.jsonToTodos(
                 (ArrayList<String>) response.getItemsToBeReturned());
         if (result==null||result.isEmpty())
@@ -72,10 +72,10 @@ public class TodoListClient {
         return result;
     }
     public List<TodoItem> SearchByEndDate(String username, String searchValue)  {
-        client.app.Response response = client
+        utility.Response response = client
                 .target(APIConnection.REST_URI+"/searchBy/EndDate?username="+username+"&searchValue="+searchValue)
                 .request(MediaType.APPLICATION_JSON)
-                .get().readEntity(client.app.Response.class);
+                .get().readEntity(utility.Response.class);
         List<TodoItem> result=utils.jsonToTodos(
                 (ArrayList<String>) response.getItemsToBeReturned());
         if (result==null||result.isEmpty())
@@ -117,25 +117,25 @@ public class TodoListClient {
                 .readEntity(Response.class)
                 .getStatusCode()/100 == 2 ;
     }
-    public client.app.Response deleteTodoItem(String name, String title) {
-        client.app.Response response = client.target(APIConnection.REST_URI)
+    public utility.Response deleteTodoItem(String name, String title) {
+        utility.Response response = client.target(APIConnection.REST_URI)
                 .path("/todolist")
                 .path("/deleteItem")
                 .path(title)
                 .queryParam("name", name)
                 .request(MediaType.APPLICATION_JSON)
                 .delete()
-                .readEntity(client.app.Response.class);
+                .readEntity(utility.Response.class);
         return response;
     }
-    public client.app.Response createTodoItem(String name, TodoItem todoItem) {
-        client.app.Response statusCode = client.target(APIConnection.REST_URI)
+    public utility.Response createTodoItem(String name, TodoItem todoItem) {
+        utility.Response statusCode = client.target(APIConnection.REST_URI)
                 .path("/todolist")
                 .path("/createItem")
                 .queryParam("name", name)
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity(todoItem, MediaType.APPLICATION_JSON))
-                .readEntity(client.app.Response.class);
+                .readEntity(utility.Response.class);
         return statusCode;
     }
 }
