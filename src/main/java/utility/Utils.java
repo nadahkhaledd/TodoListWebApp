@@ -1,6 +1,6 @@
 package utility;
 
-import server.todoItems.TodoItem;
+import server.model.TodoItem;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ui.Font;

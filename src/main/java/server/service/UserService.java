@@ -1,4 +1,6 @@
-package server.user;
+package server.service;
+
+import server.repository.UserRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

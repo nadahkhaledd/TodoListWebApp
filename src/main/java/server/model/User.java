@@ -1,9 +1,8 @@
-package server.user;
+package server.model;
 
 import enums.Category;
-import server.todoItems.TodoItem;
-import server.todoItems.TodoItemsRepository;
-import server.todoItems.TodoItemsService;
+import server.repository.TodoItemsRepository;
+import server.service.TodoItemsService;
 import ui.Font;
 
 import java.io.Serializable;

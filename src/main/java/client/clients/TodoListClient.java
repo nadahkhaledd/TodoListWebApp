@@ -1,13 +1,13 @@
-package client.app.clients;
+package client.clients;
 
-import client.app.connection.ClientConnection;
+import client.connection.APIConnection;
 import enums.Category;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.MediaType;
 import org.example.Response;
-import server.todoItems.TodoItem;
+import server.model.TodoItem;
 import utility.Utils;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class TodoListClient {
     private final Client client = ClientBuilder.newClient();
 
     public ArrayList<TodoItem> get(String username, String endpoint){
-        ArrayList arrayList = (ArrayList) client.target(ClientConnection.REST_URI)
+        ArrayList arrayList = (ArrayList) client.target(APIConnection.REST_URI)
                 .path("get").path(endpoint).queryParam("username", username)
                 .request(MediaType.APPLICATION_JSON)
                 .get(Response.class).getItemsToBeReturned();
@@ -40,7 +40,7 @@ public class TodoListClient {
 
     public List<TodoItem> SearchByTitle(String username, String searchValue)  {
         client.app.Response response = client
-                .target(ClientConnection.REST_URI+"/searchBy/Title?username="+username+"&searchValue="+searchValue)
+                .target(APIConnection.REST_URI+"/searchBy/Title?username="+username+"&searchValue="+searchValue)
                 .request(MediaType.APPLICATION_JSON)
                 .get().readEntity(client.app.Response.class);
         List<TodoItem> result=utils.jsonToTodos(
@@ -51,7 +51,7 @@ public class TodoListClient {
     }
     public List<TodoItem> SearchByPriority(String username, String searchValue)  {
         client.app.Response response = client
-                .target(ClientConnection.REST_URI+"/searchBy/Priority?username="+username+"&searchValue="+searchValue)
+                .target(APIConnection.REST_URI+"/searchBy/Priority?username="+username+"&searchValue="+searchValue)
                 .request(MediaType.APPLICATION_JSON)
                 .get().readEntity(client.app.Response.class);
         List<TodoItem> result=utils.jsonToTodos(
@@ -62,7 +62,7 @@ public class TodoListClient {
     }
     public List<TodoItem> SearchByStartDate(String username, String searchValue)  {
         client.app.Response response = client
-                .target(ClientConnection.REST_URI+"/searchBy/StartDate?username="+username+"&searchValue="+searchValue)
+                .target(APIConnection.REST_URI+"/searchBy/StartDate?username="+username+"&searchValue="+searchValue)
                 .request(MediaType.APPLICATION_JSON)
                 .get().readEntity(client.app.Response.class);
         List<TodoItem> result=utils.jsonToTodos(
@@ -73,7 +73,7 @@ public class TodoListClient {
     }
     public List<TodoItem> SearchByEndDate(String username, String searchValue)  {
         client.app.Response response = client
-                .target(ClientConnection.REST_URI+"/searchBy/EndDate?username="+username+"&searchValue="+searchValue)
+                .target(APIConnection.REST_URI+"/searchBy/EndDate?username="+username+"&searchValue="+searchValue)
                 .request(MediaType.APPLICATION_JSON)
                 .get().readEntity(client.app.Response.class);
         List<TodoItem> result=utils.jsonToTodos(
@@ -84,7 +84,7 @@ public class TodoListClient {
     }
     public boolean updateTodoItem(String name,TodoItem item, String oldTitle){
         return client
-                .target(ClientConnection.REST_URI)
+                .target(APIConnection.REST_URI)
                 .path(name)
                 .path("todolist")
                 .path(oldTitle)
@@ -95,7 +95,7 @@ public class TodoListClient {
     }
     public boolean addItemToCategory(String name , String title, Category category){
         return client
-                .target(ClientConnection.REST_URI)
+                .target(APIConnection.REST_URI)
                 .path(name)
                 .path("todolist")
                 .path(title)
@@ -107,7 +107,7 @@ public class TodoListClient {
     }
     public boolean addItemToFavorites(String name , String title){
         return client
-                .target(ClientConnection.REST_URI)
+                .target(APIConnection.REST_URI)
                 .path(name)
                 .path("todolist")
                 .path(title)
@@ -118,7 +118,7 @@ public class TodoListClient {
                 .getStatusCode()/100 == 2 ;
     }
     public client.app.Response deleteTodoItem(String name, String title) {
-        client.app.Response response = client.target(ClientConnection.REST_URI)
+        client.app.Response response = client.target(APIConnection.REST_URI)
                 .path("/todolist")
                 .path("/deleteItem")
                 .path(title)
@@ -129,7 +129,7 @@ public class TodoListClient {
         return response;
     }
     public client.app.Response createTodoItem(String name, TodoItem todoItem) {
-        client.app.Response statusCode = client.target(ClientConnection.REST_URI)
+        client.app.Response statusCode = client.target(APIConnection.REST_URI)
                 .path("/todolist")
                 .path("/createItem")
                 .queryParam("name", name)

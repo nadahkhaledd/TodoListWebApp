@@ -1,8 +1,10 @@
-package server.todoItems;
+package server.service;
 
 import enums.Category;
 import enums.Priority;
 import enums.SearchKey;
+import server.model.TodoItem;
+import server.repository.TodoItemsRepository;
 import ui.Font;
 import utility.DateUtils;
 import utility.Utils;

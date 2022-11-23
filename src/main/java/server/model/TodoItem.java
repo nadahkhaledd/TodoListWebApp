@@ -1,9 +1,8 @@
-package server.todoItems;
+package server.model;
 
 import enums.Category;
 import enums.Priority;
 import ui.Font;
-import utility.DateUtils;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;

@@ -1,4 +1,4 @@
-package server.user;
+package server.repository;
 
 import server.connection.DBConnection;
 
