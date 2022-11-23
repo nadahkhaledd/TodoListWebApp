@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class TodoItemsRepository {
+    DBConnection dbConnection = new DBConnection();
     Connection connection;
     Statement stmt;
     private static TodoItemsRepository todoRepository;
@@ -22,7 +23,7 @@ public class TodoItemsRepository {
     }
 
     private TodoItemsRepository() {
-        connection = DBConnection.configureConnection();
+        connection = dbConnection.configureConnection();
         try {
             stmt = connection.createStatement();
         } catch (SQLException e) {

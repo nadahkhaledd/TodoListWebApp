@@ -5,12 +5,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
-    static Connection connection;
+     Connection connection;
+    DBConfig db = new DBConfig();
 
-    public static Connection configureConnection() {
+    public  Connection configureConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/todolist", "root", "P@ssw0rd");
+            connection = DriverManager.getConnection(db.getUrl() + db.getDbName(), db.getDbUser() , db.getPassword());
         } catch (ClassNotFoundException | SQLException c) {
             System.out.println(c);
         }
