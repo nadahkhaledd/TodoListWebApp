@@ -4,7 +4,8 @@ import enums.Category;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.example.Response;
-import server.todoItems.*;
+import server.model.TodoItem;
+import server.service.TodoItemsService;
 
 
 @Path("/{name}/todolist")

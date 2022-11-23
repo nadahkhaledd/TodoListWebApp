@@ -1,12 +1,12 @@
 package client.app;
 
-import client.app.clients.TodoListClient;
-import client.app.clients.UserClient;
+import client.clients.TodoListClient;
+import client.clients.UserClient;
 import enums.Category;
 import enums.Priority;
-import server.user.UserService;
-import server.user.User;
-import server.todoItems.TodoItem;
+import server.service.UserService;
+import server.model.User;
+import server.model.TodoItem;
 import ui.Font;
 import ui.Text;
 import utility.DateUtils;

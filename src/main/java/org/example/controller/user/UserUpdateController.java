@@ -3,8 +3,7 @@ package org.example.controller.user;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.example.Response;
-import server.user.UserRepository;
-import server.user.UserService;
+import server.service.UserService;
 
 @Path("/{name}")
 public class UserUpdateController {

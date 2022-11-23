@@ -1,16 +1,17 @@
-package server.todoItems;
+package server.repository;
 
 
 import enums.Category;
 import server.connection.DBConnection;
+import server.model.TodoItem;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 public class TodoItemsRepository {
+    DBConnection dbConnection = new DBConnection();
     Connection connection;
     Statement stmt;
     private static TodoItemsRepository todoRepository;
@@ -22,7 +23,7 @@ public class TodoItemsRepository {
     }
 
     private TodoItemsRepository() {
-        connection = DBConnection.configureConnection();
+        connection = dbConnection.configureConnection();
         try {
             stmt = connection.createStatement();
         } catch (SQLException e) {

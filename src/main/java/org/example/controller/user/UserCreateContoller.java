@@ -3,11 +3,7 @@ package org.example.controller.user;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.example.Response;
-import server.user.User;
-import server.user.UserRepository;
-import server.user.UserService;
-
-import java.util.Map;
+import server.service.UserService;
 
 @Path("/user")
 public class UserCreateContoller {

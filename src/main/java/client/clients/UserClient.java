@@ -1,13 +1,12 @@
-package client.app.clients;
+package client.clients;
 
-import client.app.connection.ClientConnection;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.MediaType;
 import org.example.Response;
-import server.user.User;
-
+import server.model.User;
+import client.connection.APIConnection;
 import java.util.ArrayList;
 
 public class UserClient {
@@ -22,13 +21,13 @@ public class UserClient {
     }
 
     public ArrayList<String> getUserNames(){
-        return (ArrayList) client.target(ClientConnection.REST_URI)
+        return (ArrayList) client.target(APIConnection.REST_URI)
                 .path("get").path("usernames")
                 .request(MediaType.APPLICATION_JSON)
                 .get(Response.class).getItemsToBeReturned();
     }
     public client.app.Response createUser(String name) {
-        client.app.Response response = client.target(ClientConnection.REST_URI)
+        client.app.Response response = client.target(APIConnection.REST_URI)
                 .path("/user")
                 .path("/createUser")
                 .queryParam("name", name)
@@ -39,7 +38,7 @@ public class UserClient {
     }
     public boolean updateUsersName(String oldName, String newName){
         return client
-                .target(ClientConnection.REST_URI)
+                .target(APIConnection.REST_URI)
                 .path(oldName)
                 .request(MediaType.APPLICATION_JSON)
                 .put(Entity.entity(newName, MediaType.APPLICATION_JSON))

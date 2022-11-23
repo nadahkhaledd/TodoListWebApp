@@ -6,12 +6,10 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import org.example.Response;
-import server.user.User;
-import server.user.UserRepository;
-import server.user.UserService;
-import server.todoItems.TodoItem;
-import server.todoItems.TodoItemsRepository;
-import server.todoItems.TodoItemsService;
+import server.service.UserService;
+import server.model.TodoItem;
+import server.repository.TodoItemsRepository;
+import server.service.TodoItemsService;
 import utility.Utils;
 
 import java.util.ArrayList;

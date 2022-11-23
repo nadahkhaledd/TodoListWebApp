@@ -1,4 +1,4 @@
-package server.user;
+package server.repository;
 
 import server.connection.DBConnection;
 
@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class UserRepository {
+    DBConnection dbConnection = new DBConnection();
     Connection connection;
     Statement stmt;
     private static UserRepository userRepository;
@@ -18,7 +19,7 @@ public class UserRepository {
         return userRepository;
     }
     private UserRepository() {
-        connection = DBConnection.configureConnection();
+        connection = dbConnection.configureConnection();
         try {
             stmt = connection.createStatement();
         }

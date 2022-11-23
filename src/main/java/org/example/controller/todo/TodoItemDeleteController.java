@@ -5,8 +5,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.QueryParam;
 import org.example.Response;
-import server.todoItems.TodoItemsRepository;
-import server.todoItems.TodoItemsService;
+import server.service.TodoItemsService;
 
 @Path("/todolist")
 public class TodoItemDeleteController {
